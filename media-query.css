@@ -1,0 +1,19 @@
+@media (max-width: 768px) {
+    .search-bar {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .search-divider {
+        display: none;
+    }
+
+    .search-input-group {
+        width: 100%;
+    }
+
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
