@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon" />
+</head>
+
+<body>
+    <!--- HEADER -->
+    <section>
+        <header>
+            <nav>
+                <div class="logo">
+                    <img src="./img/logo.png" alt="Logo">
+                    <h1>Nestify</h1>
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Listings</a></li>
+                    <li><a href="#">Post a Property</a></li>
+                </ul>
+
+                <div class="clicks">
+                    <button class="log-in">log In</button>
+                    <button class="sign-up">Sign Up</button>
+                </div>
+            </nav>
+        </header>
+    </section>
+
+    <!-- HERO-SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Find Your Dream Home with Nestify</h1>
+            <p>Discover properties tailored to your lifestyle, from cozy apartments to luxury villas.</p>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-bar">
+                    <!-- Location Input -->
+                    <div class="search-input-group">
+                        <span class="material-symbols-outlined">
+                            location_on
+                        </span>
+                        <input type="text" placeholder="Location..." class="search-input">
+                    </div>
+
+                    <div class="search-divider"></div>
+
+                    <!-- Property Type Dropdown -->
+                    <div class="search-input-group dropdown">
+                        <span class="material-symbols-outlined">
+                            house
+                        </span>
+                        <button class="dropdown-btn" id="propertyTypeBtn">
+                            Property Type
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280"
+                                stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu" id="propertyTypeMenu">
+                            <div class="dropdown-item" data-value="apartment">Apartment</div>
+                            <div class="dropdown-item" data-value="house">House</div>
+                            <div class="dropdown-item" data-value="villa">Villa</div>
+                            <div class="dropdown-item" data-value="condo">Condo</div>
+                        </div>
+                    </div>
+
+                    <div class="search-divider"></div>
+
+                    <!-- Price Range Dropdown -->
+                    <div class="search-input-group dropdown">
+                        <span class="material-symbols-outlined">
+                            linear_scale
+                        </span>
+                        <button class="dropdown-btn" id="priceRangeBtn">
+                            Price Range
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280"
+                                stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu" id="priceRangeMenu">
+                            <div class="dropdown-item" data-value="0-100k">$0 - $100k</div>
+                            <div class="dropdown-item" data-value="100k-300k">$100k - $300k</div>
+                            <div class="dropdown-item" data-value="300k-500k">$300k - $500k</div>
+                            <div class="dropdown-item" data-value="500k+">$500k+</div>
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <button class="search-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        Search
+                    </button>
+                </div>
+            </div>
+            <!-- <button class="get-started">Get Started</button> -->
+        </div>
+    </section>
+
+    <section>
+        <div class="trust">
+            <div class="secure-payment">
+                <div class="img"><span class="material-symbols-outlined">
+                        verified_user
+                    </span>
+                </div>
+                <div class="content">
+                    <h3>Secure Payments</h3>
+                    <p>Fully Encrypted Transaction Processing For Your Peace of Mind</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="trust">
+            <div class="verified-owner">
+                <div class="img"><span class="material-symbols-outlined">
+                        verified_user
+                    </span>
+                </div>
+                <div class="content">
+                    <h3>Verified Owner</h3>
+                    <p>Every Property Owner is Thouroughly Vetted For Authenticity.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="trust">
+            <div class="support">
+                <div class="img">
+                    <span class="material-symbols-outlined">
+                        support_agent
+                    </span>
+                </div>
+                <div class="content">
+                    <h3>24/7 Support</h3>
+                    <p>Our Dedicated Support Team is Available Around The Clock to Assist You With Any Inquiries or
+                        Issues.</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
