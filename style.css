@@ -34,9 +34,16 @@
     /* Icon */
     --icon-size: 50px;
     --icon-font-size: 24px;
+
+    /* Animations */
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0.0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
 }
+
 body {
-    padding-top: 100px; /* Adjust based on your header height */
+    padding-top: 100px;
+    scroll-behavior: smooth;
 }
 
 header {
@@ -88,6 +95,7 @@ nav ul li a {
     position: relative;
     font-size: 20px;
     font-weight: 500;
+    transition: color 0.3s var(--ease-smooth);
 }
 
 nav ul li a::after {
@@ -99,6 +107,7 @@ nav ul li a::after {
     height: 2px;
     background-color: #0A3D91;
     transition: width 0.3s ease-in-out;
+    transform-origin: left;
 }
 
 nav ul li a:hover::after {
@@ -107,6 +116,48 @@ nav ul li a:hover::after {
 
 nav ul li a:hover {
     color: #0A3D91;
+}
+
+
+
+
+.btn-gold,
+.clicks button,
+.search-btn,
+.newsletter-btn {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s var(--ease-smooth),
+        box-shadow 0.3s var(--ease-smooth);
+}
+
+.btn-gold::before,
+.clicks button::before,
+.search-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    transition: left 0.6s var(--ease-smooth);
+}
+
+.btn-gold:hover::before,
+.clicks button:hover::before,
+.search-btn:hover::before {
+    left: 100%;
+}
+
+.clicks button:hover,
+.search-btn:hover,
+.newsletter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(10, 61, 145, 0.3);
 }
 
 .clicks {
@@ -132,6 +183,7 @@ nav ul li a:hover {
 }
 
 /*==== HERO-SECTION ===== */
+
 .hero {
     min-height: 100vh;
     display: flex;
@@ -152,17 +204,33 @@ nav ul li a:hover {
     /* padding: 20px; */
 }
 
+@keyframes fadeup {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .hero-content h1 {
     font-size: 48px;
     color: #ffffff;
     margin-bottom: 20px;
     font-weight: 700;
+    opacity: 0;
+    animation: fadeup 1s var(--ease-out) 0s forwards;
 }
 
 .hero-content p {
     font-size: 24px;
     color: #e0e0e0;
     margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeup 1s var(--ease-out) 0.2s forwards;
 }
 
 .get-started {
@@ -188,6 +256,8 @@ nav ul li a:hover {
     max-width: 900px;
     margin: 0 auto;
     padding: 0 20px;
+    opacity: 0;
+    animation: fadeup 1s var(--ease-out) 0.4s forwards;
 }
 
 .search-bar {
@@ -275,10 +345,16 @@ nav ul li a:hover {
     min-width: 200px;
     z-index: 100;
     display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s var(--ease-smooth),
+        transform 0.3s var(--ease-smooth);
 }
 
 .dropdown.active .dropdown-menu {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .dropdown-item {
@@ -286,11 +362,14 @@ nav ul li a:hover {
     cursor: pointer;
     font-size: 14px;
     color: #374151;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s var(--ease-smooth),
+        transform 0.2s var(--ease-smooth);
 }
 
 .dropdown-item:hover {
     background-color: #f3f4f6;
+    transform: translateX(5px);
+
 }
 
 .dropdown-item.selected {
@@ -319,6 +398,18 @@ nav ul li a:hover {
     background-color: #002466;
 }
 
+/* 2. SCROLL REVEAL */
+.hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 
 .trust {
     max-width: var(--container-max-width);
@@ -345,6 +436,13 @@ nav ul li a:hover {
     justify-content: center;
     border-radius: 50%;
     margin-bottom: var(--spacing-sm);
+    transition: transform 0.4s var(--ease-smooth),
+        background-color 0.4s var(--ease-smooth);
+}
+
+.trust>div:hover .img {
+    transform: scale(1.1) rotate(5deg);
+    background-color: #002466;
 }
 
 .trust .img .material-symbols-outlined {
@@ -406,15 +504,17 @@ nav ul li a:hover {
     color: var(--primary-blue);
     text-decoration: none;
     font-weight: 500;
-    display: flex;
+    transition: color 0.3s var(--ease-smooth),
+        transform 0.3s var(--ease-smooth);
+    display: inline-flex;
     align-items: center;
     gap: 5px;
-    transition: color 0.3s ease;
     position: relative;
 }
 
 .title .link a:hover {
     color: var(--dark-blue);
+    transform: translateX(5px);
 }
 
 .title .link a::after {
@@ -448,10 +548,17 @@ nav ul li a:hover {
 .card {
     overflow: hidden;
     border-radius: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.6s var(--ease-smooth),
+        box-shadow 0.6s var(--ease-smooth);
     position: relative;
     width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover .image-text-overlay .text-right {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+    transition: all 0.3s var(--ease-smooth);
 }
 
 .image-text-overlay {
@@ -462,6 +569,7 @@ nav ul li a:hover {
     display: flex;
     justify-content: space-between;
     padding: 15px;
+    transition: opacity 0.4s var(--ease-smooth);
 }
 
 .text-left,
@@ -489,8 +597,8 @@ nav ul li a:hover {
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-9px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.13);
 }
 
 .card img {
@@ -498,7 +606,7 @@ nav ul li a:hover {
     height: 200px;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s ease;
+    transition: transform 0.8s var(--ease-smooth);
 }
 
 .card img:hover {
@@ -506,8 +614,13 @@ nav ul li a:hover {
     transition: transform 0.3s ease;
 }
 
+.card:hover .card-content {
+    transform: translateY(-5px);
+}
+
 .card-content {
     padding: var(--spacing-sm);
+    transition: transform 0.4s var(--ease-smooth);
 }
 
 .card-content h2 {
@@ -570,9 +683,10 @@ nav ul li a:hover {
     gap: 20px;
     font-family: "Roboto", sans-serif;
 } */
- footer{
-  background-color: var(--dark-blue);  
- }
+footer {
+    background-color: var(--dark-blue);
+}
+
 .footer {
     margin-top: 25px;
     color: var(--white);
@@ -604,6 +718,17 @@ nav ul li a:hover {
     font-size: 20px;
 }
 
+.socials a {
+    transition: transform 0.3s var(--ease-smooth),
+        color 0.3s var(--ease-smooth);
+    display: inline-block;
+}
+
+.socials a:hover {
+    transform: translateY(-3px) scale(1.1);
+    color: var(--text-yellow);
+}
+
 .vision {
     /* max-width: var(--container-max-width); */
     /* margin: 0 auto; */
@@ -614,28 +739,37 @@ nav ul li a:hover {
     gap: 20px;
     font-family: "Roboto", sans-serif;
 }
-.quick-links{
+
+.quick-links {
     line-height: 3;
 }
-.quick-links li{
+
+.quick-links li {
     list-style: none;
 }
-.quick-links a{
+
+.quick-links a {
     color: var(--text-gray);
     font-size: 15px;
     font-weight: 300;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.3s var(--ease-smooth),
+        transform 0.2s var(--ease-smooth);
+    display: inline-block;
 }
-.quick-links a:hover{
+
+.quick-links a:hover {
     color: var(--text-yellow);
+    transform: translate(5px);
 }
-.p{
+
+.p {
     color: var(--text-gray);
     font-size: 14px;
     font-weight: 300;
     max-width: 300px;
 }
+
 /* .quick-links p{
     color: var(--text-grey);
     font-size: 16px;
@@ -648,21 +782,30 @@ nav ul li a:hover {
     border-radius: 5px 0 0 5px;
     outline: none;
     width: 200px;
-     background: rgba(0, 36, 102, 0.25);
+    background: rgba(0, 36, 102, 0.25);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     margin-right: 10px;
+    transition: all 0.3s var(--ease-smooth);
 }
+
+.newsletter-input:focus {
+    background: rgba(0, 36, 102, 0.4);
+    border-color: rgba(204, 172, 111, 0.5);
+    transform: translateY(-2px);
+}
+
 .newsletter-btn {
     padding: 10px 20px;
     border: none;
-    background-color:var(--text-yellow);
+    background-color: var(--text-yellow);
     color: #fff;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
 .copyright {
     display: flex;
     justify-content: space-between;
@@ -673,9 +816,15 @@ nav ul li a:hover {
     font-size: 14px;
     color: var(--text-gray);
 }
+
 .copyright a {
     color: var(--text-gray);
     text-decoration: none;
-    transition: color 0.3s ease;
     margin-left: 20px;
+    transition: color 0.3s var(--ease-smooth),
+        transform 0.2s var(--ease-smooth);
+    display: inline-block;
+}
+.copyright a:hover {
+    transform: scale(1.05);
 }
