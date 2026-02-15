@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>NESTIFY</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/auth.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon" />
 </head>
@@ -27,7 +28,7 @@
                 </ul>
 
                 <div class="clicks">
-                    <button class="log-in">log In</button>
+                    <button class="btn-login">log In</button>
                     <button class="sign-up">Sign Up</button>
                 </div>
             </nav>
@@ -314,7 +315,90 @@
             </div>
         </div>
     </footer>
-<script src="animation.js"></script>
+
+    <!-- LOGIN/SIGNUP MODAL -->
+    <section>
+        <div class="modal-overlay" id="authModal">
+            <div class="modal-card">
+                <button class="modal-close" id="closeModal"><span class="material-symbols-outlined">
+                        close
+                    </span>
+                </button>
+                <div class="tab-container">
+                    <button class="tab active">Sign In</button>
+                    <button class="tab">Create Account</button>
+                </div>
+
+
+                <div class="form-container">
+                    <!-- signin -->
+                    <div class="form-content active" id="signin">
+                        <h2 class="form-title">Welcome</h2>
+
+                        <form id="signinform">
+                            <div class="form-group">
+                                <label for="signin-email">Email Address</label>
+                                <input type="email" placeholder="Enter Your Email" id="signin-email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="signin-password">Password</label>
+                                <input type="password" id="signin-password" placeholder="Enter your password" required>
+                            </div>
+
+                            <div class="forgot-password">
+                                <a href="#forgot">Forgot Password?</a>
+                            </div>
+
+                            <button type="submit" class="btn-submit">Login</button>
+                        </form>
+                    </div>
+
+                    <!-- signup -->
+                    <div class="form-content" id="register">
+                        <h2 class="form-title">Create Your Account</h2>
+                        <p> Keep it! It sounds expensive and professional.</p>
+
+                        <form id="register-form">
+                            <div class="form-group">
+                                <label for="register-name">Full Name</label>
+                                <input type="text" placeholder="Enter Your Full Name" id="register-name">
+                            </div>
+
+                            <div class="form-group">
+                             <label for="email">Email Address</label>
+                             <input type="text" placeholder="Enter Email" required id="register-email">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password">password</label>
+                                <input type="password" id="register-password" placeholder="create a password" required>
+                            </div>
+
+                            <div class="role-selection">
+                                <label>I'm a:</label>
+                                <div class="role-options">
+                                    <div class="role-option">
+                                        <input type="radio" id="role-tenant" name="role" value="tenant" checked>
+                                        <label for="role-tenant"> <i class="fa-solid fa-house-user"></i>Tenant</label>
+                                    </div>
+                                    <div class="role-option">
+                                        <input type="radio" id="role-lanlord" name="role" value="lanlord">
+                                        <label for="role-lanlord"><i class="fa-solid fa-user-tie"></i>lanlord</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn-submit" type="submit">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <script src="./javascripts/auth.js"></script>
     <script src="https://kit.fontawesome.com/e43e5fd14a.js" crossorigin="anonymous"></script>
 </body>
 
