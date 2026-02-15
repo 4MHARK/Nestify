@@ -33,7 +33,7 @@ tabs.forEach(tab => {
         
         tab.classList.add('active')
         const target = tab.getAttribute('data-tab')
-        formContents.forEach(f => {f.classList.remove('active')})
+        formcontents.forEach(f => {f.classList.remove('active')})
         document.getElementById(target).classList.add('active');
     })
 });
