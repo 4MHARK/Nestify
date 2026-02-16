@@ -241,16 +241,6 @@ input::placeholder {
     /* background-color: #f1f5f9; */
 
 }
-
-/* .role-option.active {
-    background: var(--white);
-    color: var(--primary-blue);
-    border-radius: 10px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    /* border-bottom: 2px solid var(--dark-blue); *
-} */
 .role-option {
     flex: 1;
     position: relative;
@@ -369,19 +359,6 @@ Divider * .divider {
     color: #d4af37;
     text-decoration: underline;
 }
-
-/* .agree{
-    display: flex;
-    align-items: flex-end;
-}
-.agree p{
-    font-size: 14px;
-    
-}
-.agree span{
-    color: var(--primary-blue);
-    cursor: pointer;
-} */
 .agree {
     display: flex;
     align-items: flex-start;
