@@ -68,12 +68,13 @@
 .modal-card {
     background: var(--light-gray-bg);
     width: 90%;
-    max-width: 450px;
+    max-width: 550px;
+    max-height: 90vh;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     position: relative;
     animation: slideUp 0.4s ease;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 @keyframes slideUp {
@@ -152,7 +153,8 @@
 }
 
 .form-container {
-    padding: 40px 30px;
+    padding: 15px 25px 20px;
+    flex: 1;
 }
 
 .form-content {
@@ -179,22 +181,27 @@
 }
 
 .form-title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--primary-blue);
-    margin-bottom: 25px;
+    margin-bottom: 12px;
     text-align: center;
 }
 
+.form-content p {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: 600;
-    color: #333;
+    color: #385488;
     font-size: 14px;
 }
 
@@ -204,7 +211,8 @@ input::placeholder {
 
 .form-group input[type="text"],
 .form-group input[type="email"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group input[type="number"] {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid #909fbc;
@@ -213,6 +221,7 @@ input::placeholder {
     transition: all 0.3s ease;
     outline: none;
     background-color: #ebecee;
+    padding: 10px 15px;
 }
 
 .form-group input:focus {
@@ -220,27 +229,55 @@ input::placeholder {
     /* box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1); */
 }
 
-/* .role-selection {
+.role-selection {
+    margin-bottom: 20px;
+}
 
-    margin-bottom: 25px;
+.role-options {
+    display: flex;
+    gap: 15px;
+    /* border: 2px solid #e0e0e0; */
+    /* border-radius: 10px; */
+    /* background-color: #f1f5f9; */
+
+}
+
+/* .role-option.active {
+    background: var(--white);
+    color: var(--primary-blue);
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    /* border-bottom: 2px solid var(--dark-blue); *
+} */
+.role-option {
+    flex: 1;
+    position: relative;
+}
+
+.role-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.role-option label {
+    display: block;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: #666;
 }
 
 .role-selection label {
     display: block;
     margin-bottom: 12px;
     font-weight: 600;
-    color: #333;
+    /* color: ; */
     font-size: 14px;
-}
-
-.role-options {
-    display: flex;
-    gap: 15px;
-}
-
-.role-option {
-    flex: 1;
-    position: relative;
 }
 
 .role-option input[type="radio"] {
@@ -259,65 +296,18 @@ input::placeholder {
     font-weight: 500;
     color: #666;
 }
-  .role-option input[type="radio"]:checked + label {
-            border-color: #2a5298;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(42, 82, 152, 0.3);
-        }
-    
- .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
 
-        .btn-submit::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
+.role-option input[type="radio"]:checked+label {
+    border-color: #2a5298;
+    background: var(--dark-blue);
+    color: white;
+    box-shadow: 0 4px 15px rgba(42, 82, 152, 0.3);
+}
 
-        .btn-submit:hover::before {
-            left: 100%;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(42, 82, 152, 0.4);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        /* Divider *
-        .divider {
-            text-align: center;
-            margin: 20px 0;
-            color: #999;
-            font-size: 14px;
-        }
-
-*/
 .btn-submit {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: var(--dark-blue);
     color: white;
     border: none;
     border-radius: 10px;
@@ -328,6 +318,39 @@ input::placeholder {
     position: relative;
     overflow: hidden;
 }
+
+.btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-submit:hover::before {
+    left: 100%;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(42, 82, 152, 0.4);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+Divider * .divider {
+    text-align: center;
+    margin: 20px 0;
+    color: #999;
+    font-size: 14px;
+}
+
+
 
 .forgot-password {
     text-align: right;
@@ -345,4 +368,56 @@ input::placeholder {
 .forgot-password a:hover {
     color: #d4af37;
     text-decoration: underline;
+}
+
+/* .agree{
+    display: flex;
+    align-items: flex-end;
+}
+.agree p{
+    font-size: 14px;
+    
+}
+.agree span{
+    color: var(--primary-blue);
+    cursor: pointer;
+} */
+.agree {
+    display: flex;
+    align-items: flex-start;
+    /* gap: 10px; */
+}
+
+.agree p {
+    font-size: 14px;
+
+}
+
+.agree span a {
+    color: var(--primary-blue);
+    cursor: pointer;
+}
+
+.hidden{
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+.visible {
+    display: block;
+    opacity: 1;
+    animation: fadeIn 0.4s;
+}
+.file-upload-box {
+    border: 2px dashed #385488;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background: #f9f9f9;
+    margin-top: 10px;
+}
+.file-upload-box:hover {
+    border-color: var(--primary-blue);
+    background: #eef2ff;
 }
