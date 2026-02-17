@@ -44,15 +44,17 @@ class PropertyService {
         return { success: true, property };
     }
 
-    static updateProperty(id, updates) {
+    static updateProperty(id, updates, requireOwnership = true) {
         const property = PropertyService.getPropertyById(id);
         if (!property) {
             return { success: false, error: 'Property not found' };
         }
 
-        const user = AuthService.getCurrentUser();
-        if (property.ownerId !== user.id) {
-            return { success: false, error: 'Unauthorized' };
+        if (requireOwnership) {
+            const user = AuthService.getCurrentUser();
+            if (property.ownerId !== user.id) {
+                return { success: false, error: 'Unauthorized' };
+            }
         }
 
         const updatedProperty = { ...property, ...updates, updatedAt: new Date().toISOString() };

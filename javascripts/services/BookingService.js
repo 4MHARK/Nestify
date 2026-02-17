@@ -29,6 +29,9 @@ class BookingService {
             id: StorageService.generateId(),
             propertyId: bookingData.propertyId,
             tenantId: user.id,
+            checkIn: bookingData.checkIn || null,
+            checkOut: bookingData.checkOut || null,
+            guests: bookingData.guests || 1,
             status: 'pending',
             message: bookingData.message || '',
             createdAt: new Date().toISOString()

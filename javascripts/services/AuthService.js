@@ -5,7 +5,7 @@ class AuthService {
     };
 
     static DASHBOARD_ROUTES = {
-        tenant: 'buyer-dashboard.html',
+        tenant: 'property-listings.html',
         landlord: 'admin-dashboard.html'
     };
 

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Nestify</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <link rel="stylesheet" href="./css/auth.css"> -->
+    <link rel="stylesheet" href="./css/checkout.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <div class="logo" onclick="window.location.href='tenant-profile.html'">
+                <img src="./img/logo.png" alt="Nestify">
+                <span>Nestify</span>
+            </div>
+            <h1>Secure Checkout</h1>
+        </div>
+
+        <div class="checkout-content">
+            <!-- Left: Payment Form -->
+            <div class="payment-section">
+                <h2>Payment Details</h2>
+                
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        <span class="error-message" id="cardNumberError"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5">
+                            <span class="error-message" id="expiryError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" id="cvv" placeholder="123" maxlength="4">
+                            <span class="error-message" id="cvvError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cardholder Name</label>
+                        <input type="text" id="cardName" placeholder="John Doe">
+                        <span class="error-message" id="cardNameError"></span>
+                    </div>
+
+                    <button type="submit" class="pay-btn" id="payBtn">
+                        <span class="material-symbols-outlined">lock</span>
+                        Confirm Secure Payment
+                    </button>
+                </form>
+
+                <div class="security-note">
+                    <span class="material-symbols-outlined">verified_user</span>
+                    <p>Your payment is secure and encrypted</p>
+                </div>
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div class="summary-section">
+                <h2>Booking Summary</h2>
+                <div class="property-preview" id="propertyPreview">
+                    <img src="./img/card1.jpg" alt="Property" id="propertyImage">
+                    <div class="property-info">
+                        <h3 id="propertyTitle">Property Title</h3>
+                        <p id="propertyAddress">Address</p>
+                    </div>
+                </div>
+
+                <div class="summary-details">
+                    <div class="summary-row">
+                        <span>Check-In</span>
+                        <span id="checkInDate">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Check-Out</span>
+                        <span id="checkOutDate">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Guests</span>
+                        <span id="guestCount">-</span>
+                    </div>
+                </div>
+
+                <div class="summary-pricing">
+                    <div class="summary-row">
+                        <span>Property Price</span>
+                        <span id="propertyPrice">$0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Security Deposit</span>
+                        <span>$1,000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Service Fee</span>
+                        <span>$0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="totalPrice">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Processing your payment...</p>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <span class="material-symbols-outlined">check_circle</span>
+            </div>
+            <h2>Payment Confirmed!</h2>
+            <p>Your booking has been completed successfully.</p>
+            <p class="redirect-text">Redirecting to your profile...</p>
+        </div>
+    </div>
+
+    <script src="./javascripts/services/StorageService.js"></script>
+    <script src="./javascripts/services/AuthService.js"></script>
+    <script src="./javascripts/services/PropertyService.js"></script>
+    <script src="./javascripts/checkout.js"></script>
+</body>
+</html>
