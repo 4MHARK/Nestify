@@ -33,6 +33,8 @@ class PropertyService {
             bathrooms: parseInt(propertyData.bathrooms) || 0,
             sqft: parseInt(propertyData.sqft) || 0,
             address: propertyData.address || '',
+            amenities: propertyData.amenities || [],
+            images: propertyData.images || ['./img/card1.jpg'],
             status: 'available',
             createdAt: new Date().toISOString()
         };
