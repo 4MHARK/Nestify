@@ -463,16 +463,12 @@ body {
     cursor: pointer;
     color: var(--slate-400);
     transition: all 0.2s;
-    opacity: 0;
-}
-
-.property-card:hover .favorite-btn {
     opacity: 1;
 }
 
 .favorite-btn:hover,
 .favorite-btn.active {
-    background: var(--red-500);
+    background: #ef4444;
     color: var(--white);
 }
 

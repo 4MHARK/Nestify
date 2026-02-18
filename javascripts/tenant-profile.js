@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('welcomeName').textContent = user.username;
     document.getElementById('userAvatar').innerHTML = '<span class="material-symbols-outlined">person</span>';
     
+    // Check for notifications
+    checkNotifications();
+    
     // Logout
     document.getElementById('logoutBtn').addEventListener('click', () => {
         AuthService.logout();
@@ -59,6 +62,93 @@ document.addEventListener('DOMContentLoaded', function() {
     loadMessages();
 });
 
+function checkNotifications() {
+    const notifications = StorageService.get('nestify_notifications') || [];
+    const user = AuthService.getCurrentUser();
+    
+    // Filter notifications for current user
+    const userNotifications = notifications.filter(n => !n.read);
+    
+    if (userNotifications.length > 0) {
+        // Show notification toast
+        const latestNotification = userNotifications[userNotifications.length - 1];
+        
+        if (latestNotification.type === 'booking_approved') {
+            showNotificationToast('Your booking has been approved! Please proceed to checkout.', 'success');
+            
+            // Mark notification as read
+            const allNotifications = StorageService.get('nestify_notifications') || [];
+            const updatedNotifications = allNotifications.map(n => {
+                if (n.id === latestNotification.id) {
+                    return { ...n, read: true };
+                }
+                return n;
+            });
+            StorageService.set('nestify_notifications', updatedNotifications);
+        }
+    }
+}
+
+function showNotificationToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `notification-toast ${type}`;
+    toast.innerHTML = `
+        <span class="material-symbols-outlined">${type === 'success' ? 'check_circle' : 'info'}</span>
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    `;
+    
+    // Add toast styles if not already added
+    if (!document.getElementById('toast-styles')) {
+        const style = document.createElement('style');
+        style.id = 'toast-styles';
+        style.textContent = `
+            .notification-toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                padding: 16px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            }
+            .notification-toast.success {
+                border-left: 4px solid #10b981;
+            }
+            .notification-toast.success .material-symbols-outlined:first-child {
+                color: #10b981;
+            }
+            .notification-toast button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 4px;
+                margin-left: auto;
+            }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(toast);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+
 function loadFavorites() {
     const favorites = JSON.parse(localStorage.getItem('nestify_favorites')) || [];
     const container = document.getElementById('favoritesList');
@@ -76,18 +166,32 @@ function loadFavorites() {
     
     const properties = favorites.map(id => PropertyService.getPropertyById(id)).filter(p => p);
     
-    container.innerHTML = properties.map(property => `
-        <div class="property-card">
+    container.innerHTML = `
+        <div class="properties-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%;">
+            <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--dark-blue);">Saved Properties (${properties.length})</h2>
+            <a href="property-listings.html" class="btn-primary" style="padding: 10px 20px; background: var(--primary-blue); color: white; text-decoration: none; border-radius: 8px; font-weight: 500;">View More Properties</a>
+        </div>
+    ` + properties.map(property => `
+        <div class="property-card" data-id="${property.id}">
             <div class="property-image">
                 <img src="${property.images?.[0] || './img/card1.jpg'}" alt="${property.title}">
+                ${property.status === 'available' ? '<span class="property-badge">Featured</span>' : ''}
                 <button class="favorite-btn active" onclick="removeFavorite('${property.id}')">
                     <span class="material-symbols-outlined">favorite</span>
                 </button>
+                <span class="property-price">$${formatPrice(property.price)}</span>
             </div>
             <div class="property-details">
-                <h3>${property.title}</h3>
-                <p class="property-location">${property.address || 'Location not specified'}</p>
-                <p class="property-price">$${formatPrice(property.price)}</p>
+                <h3 class="property-title">${property.title}</h3>
+                <p class="property-location">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">location_on</span>
+                    ${property.address || 'Location not specified'}
+                </p>
+                <div class="property-features">
+                    <span><span class="material-symbols-outlined" style="font-size: 16px;">bed</span> ${property.bedrooms || 0}</span>
+                    <span><span class="material-symbols-outlined" style="font-size: 16px;">bathtub</span> ${property.bathrooms || 0}</span>
+                    <span><span class="material-symbols-outlined" style="font-size: 16px;">square_foot</span> ${property.sqft || 0}</span>
+                </div>
                 <button class="view-details-btn" onclick="window.location.href='property-detail.html?id=${property.id}'">View Details</button>
             </div>
         </div>
