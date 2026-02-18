@@ -179,6 +179,9 @@ function processPayment(booking, property) {
     const loadingOverlay = document.getElementById('loadingOverlay');
     loadingOverlay.classList.add('show');
     
+    // Generate transaction ID
+    const transactionId = 'TXN-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 5).toUpperCase();
+    
     // 5 second delay
     setTimeout(() => {
         // Update booking status
@@ -189,8 +192,12 @@ function processPayment(booking, property) {
             bookings[bookingIndex].status = 'completed';
             bookings[bookingIndex].paymentStatus = 'paid';
             bookings[bookingIndex].paidAt = new Date().toISOString();
+            bookings[bookingIndex].transactionId = transactionId;
             StorageService.set('nestify_bookings', bookings);
         }
+        
+        // Populate receipt data
+        populateReceipt(booking, property, transactionId);
         
         // Hide loading, show success
         loadingOverlay.classList.remove('show');
@@ -198,9 +205,96 @@ function processPayment(booking, property) {
         const successModal = document.getElementById('successModal');
         successModal.classList.add('show');
         
-        // Redirect after 3 seconds
-        setTimeout(() => {
+        // Handle receipt modal
+        document.getElementById('viewReceiptBtn').addEventListener('click', () => {
+            successModal.classList.remove('show');
+            document.getElementById('receiptModal').classList.add('show');
+        });
+        
+        document.getElementById('closeReceipt').addEventListener('click', () => {
+            document.getElementById('receiptModal').classList.remove('show');
             window.location.href = 'tenant-profile.html';
-        }, 3000);
+        });
+        
+        document.getElementById('downloadReceiptBtn').addEventListener('click', () => {
+            downloadReceipt(booking, property, transactionId);
+        });
+        
+        document.getElementById('goToProfileBtn').addEventListener('click', () => {
+            window.location.href = 'tenant-profile.html';
+        });
     }, 5000);
+}
+
+function populateReceipt(booking, property, transactionId) {
+    const propertyPrice = property.price || 0;
+    const securityDeposit = 1000;
+    const serviceFee = 0;
+    const total = propertyPrice + securityDeposit + serviceFee;
+    const paidAt = new Date();
+    
+    document.getElementById('receiptBookingId').textContent = booking.id;
+    document.getElementById('receiptTransactionId').textContent = transactionId;
+    document.getElementById('receiptDate').textContent = paidAt.toLocaleDateString() + ' ' + paidAt.toLocaleTimeString();
+    document.getElementById('receiptPropertyImage').src = property.images?.[0] || './img/card1.jpg';
+    document.getElementById('receiptPropertyTitle').textContent = property.title;
+    document.getElementById('receiptPropertyAddress').textContent = property.address || 'Location not specified';
+    document.getElementById('receiptCheckIn').textContent = booking.checkIn || '-';
+    document.getElementById('receiptCheckOut').textContent = booking.checkOut || '-';
+    document.getElementById('receiptGuests').textContent = booking.guests || '1';
+    document.getElementById('receiptPropertyPrice').textContent = '$' + propertyPrice.toLocaleString();
+    document.getElementById('receiptTotal').textContent = '$' + total.toLocaleString();
+}
+
+function downloadReceipt(booking, property, transactionId) {
+    const propertyPrice = property.price || 0;
+    const securityDeposit = 1000;
+    const serviceFee = 0;
+    const total = propertyPrice + securityDeposit + serviceFee;
+    const paidAt = new Date();
+    
+    const receiptContent = `
+NESTIFY - PAYMENT RECEIPT
+========================
+
+BOOKING CONFIRMATION
+--------------------
+Confirmation ID: ${booking.id}
+Transaction ID: ${transactionId}
+Date: ${paidAt.toLocaleDateString()} ${paidAt.toLocaleTimeString()}
+Status: PAID
+
+PROPERTY DETAILS
+----------------
+Property: ${property.title}
+Address: ${property.address || 'Location not specified'}
+
+BOOKING DETAILS
+---------------
+Check-In: ${booking.checkIn || '-'}
+Check-Out: ${booking.checkOut || '-'}
+Guests: ${booking.guests || '1'}
+
+PAYMENT BREAKDOWN
+-----------------
+Property Price:    $${propertyPrice.toLocaleString()}
+Security Deposit:  $1,000
+Service Fee:       $0
+--------------------
+TOTAL PAID:        $${total.toLocaleString()}
+
+========================
+Thank you for choosing Nestify!
+========================
+    `;
+    
+    const blob = new Blob([receiptContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Nestify-Receipt-${booking.id}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }

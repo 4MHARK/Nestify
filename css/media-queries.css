@@ -1,0 +1,805 @@
+/* ============================================
+   MEDIA QUERIES - Mobile & Tablet
+   Covers: 320px to 768px
+   ============================================ */
+
+/* ============================================
+   BASE STYLES FOR ALL DEVICES
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-width: 320px;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ============================================
+   SMALL MOBILE - 320px to 479px
+   ============================================ */
+
+@media (max-width: 479px) {
+    /* Typography */
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1.125rem; }
+    h3 { font-size: 1rem; }
+    p { font-size: 0.75rem; }
+    
+    /* Spacing */
+    .container,
+    section,
+    main {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    /* Buttons */
+    .btn,
+    button,
+    input[type="submit"] {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Forms */
+    input,
+    textarea,
+    select {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+}
+
+/* ============================================
+   MOBILE - 320px to 767px
+   ============================================ */
+
+@media (max-width: 767px) {
+    
+    /* ---------- HOMEPAGE (index.html) ---------- */
+    
+    /* Header & Navigation */
+    header nav {
+        padding: 0.5rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .logo img {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .logo h1 {
+        font-size: 1rem;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+    
+    .clicks {
+        display: flex;
+        gap: 0.25rem;
+    }
+    
+    .clicks button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Hero Section */
+    .hero {
+        padding: 2rem 0.75rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+    
+    .hero-content p {
+        font-size: 0.875rem;
+    }
+    
+    /* Search Bar */
+    .search-container {
+        padding: 1rem;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .search-input-group {
+        width: 100%;
+    }
+    
+    .search-divider {
+        display: none;
+    }
+    
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Trust Section */
+    .trust {
+        padding: 1.5rem 0.75rem;
+        flex-direction: column;
+    }
+    
+    .secure-payment,
+    .verified-owner,
+    .support {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    /* Collections */
+    .collections {
+        padding: 1.5rem 0.75rem;
+    }
+    
+    .title {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .card {
+        margin: 0;
+    }
+    
+    /* Footer */
+    footer .footer {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 0.75rem;
+        text-align: center;
+    }
+    
+    .vision {
+        text-align: center;
+    }
+    
+    .socials {
+        justify-content: center;
+    }
+    
+    .quick-links ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .newsletter {
+        flex-direction: column;
+    }
+    
+    .newsletter-input {
+        width: 100%;
+    }
+    
+    .copyright {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+    
+    /* ---------- AUTH MODAL ---------- */
+    
+    .modal-overlay {
+        align-items: flex-start;
+        padding-top: 1rem;
+        overflow-y: auto;
+    }
+    
+    .modal-card {
+        margin: 0.5rem;
+        padding: 1rem;
+        width: calc(100% - 1rem);
+        max-width: none;
+    }
+    
+    .modal-close {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .tab-container {
+        flex: 1;
+        gap: 0.25rem;
+    }
+    
+    .tab {
+        flex: 1;
+        padding: 0.5rem 0.25rem;
+        font-size: 0.75rem;
+    }
+    
+    .form-title {
+        font-size: 1.25rem;
+    }
+    
+    .form-group {
+        margin-bottom: 0.75rem;
+    }
+    
+    .form-group label {
+        font-size: 0.75rem;
+    }
+    
+    .form-group input {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .role-options {
+        flex-direction: column;
+    }
+    
+    .file-upload-box {
+        padding: 0.75rem;
+    }
+    
+    .btn-submit {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    /* ---------- PROPERTY LISTINGS ---------- */
+    
+    .nav-container {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .search-bar {
+        order: 3;
+        flex: 1 1 100%;
+    }
+    
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .filters-sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+        padding: 1rem;
+    }
+    
+    .filter-section {
+        margin-bottom: 1rem;
+    }
+    
+    .price-inputs {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .price-inputs input {
+        width: 100%;
+    }
+    
+    .price-inputs span {
+        display: none;
+    }
+    
+    .price-presets {
+        flex-direction: column;
+    }
+    
+    .price-presets button {
+        width: 100%;
+    }
+    
+    .filter-options {
+        flex-direction: column;
+    }
+    
+    .apply-filters-btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .listings-content {
+        padding: 1rem;
+    }
+    
+    .listings-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .properties-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .property-image {
+        height: 12rem;
+    }
+    
+    .property-details {
+        padding: 1rem;
+    }
+    
+    .property-title {
+        font-size: 1rem;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    /* ---------- PROPERTY DETAIL ---------- */
+    
+    .detail-container {
+        padding: 1rem;
+    }
+    
+    .breadcrumbs {
+        font-size: 0.75rem;
+        flex-wrap: wrap;
+    }
+    
+    .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .main-image {
+        aspect-ratio: 16/10;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .info-header {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .info-title h1 {
+        font-size: 1.25rem;
+    }
+    
+    .info-price {
+        text-align: left;
+    }
+    
+    .price-value {
+        font-size: 1.5rem;
+    }
+    
+    .details-block {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-item {
+        padding: 1rem;
+    }
+    
+    .amenities-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-sidebar {
+        position: static;
+    }
+    
+    .booking-card,
+    .agent-card,
+    .support-card {
+        padding: 1rem;
+    }
+    
+    .date-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .book-now-btn {
+        padding: 0.875rem;
+    }
+    
+    .modal-card {
+        padding: 1rem;
+    }
+    
+    /* ---------- CHECKOUT ---------- */
+    
+    .checkout-container {
+        padding: 1rem;
+    }
+    
+    .checkout-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .checkout-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .payment-section,
+    .summary-section {
+        padding: 1rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .property-preview {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .property-preview img {
+        width: 100%;
+        height: 150px;
+    }
+    
+    /* ---------- DASHBOARD ---------- */
+    
+    .dashboard-wrapper {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0.5rem;
+        z-index: 100;
+    }
+    
+    .sidebar-brand,
+    .menu-label,
+    .user-details {
+        display: none;
+    }
+    
+    .sidebar-menu {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .menu-section {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .menu-item {
+        flex-direction: column;
+        padding: 0.5rem;
+        font-size: 0.625rem;
+        gap: 0.25rem;
+    }
+    
+    .menu-item span:first-child {
+        font-size: 1.25rem;
+    }
+    
+    .sidebar-footer {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        margin-bottom: 60px;
+        padding: 1rem;
+    }
+    
+    .top-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .top-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .stats-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .properties-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters-bar {
+        flex-direction: column;
+    }
+    
+    .booking-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .booking-tab {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    .booking-card {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .booking-property {
+        flex-direction: column;
+    }
+    
+    .booking-property img {
+        width: 100%;
+        height: 120px;
+    }
+    
+    .booking-actions {
+        flex-direction: column;
+    }
+    
+    .booking-actions button {
+        width: 100%;
+    }
+    
+    .message-card {
+        flex-direction: column;
+    }
+    
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ============================================
+   TABLET - 768px to 1023px
+   ============================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    
+    /* Header */
+    header nav {
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .nav-links {
+        gap: 1rem;
+    }
+    
+    /* Hero */
+    .hero-content {
+        padding: 2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    /* Search */
+    .search-bar {
+        flex-wrap: wrap;
+    }
+    
+    .search-input-group {
+        flex: 1 1 45%;
+    }
+    
+    .search-divider {
+        display: none;
+    }
+    
+    /* Collections */
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Footer */
+    footer .footer {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Property Listings */
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .filters-sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .filter-section {
+        display: inline-block;
+        margin-right: 1rem;
+        margin-bottom: 0;
+    }
+    
+    .apply-filters-btn {
+        display: inline-block;
+        width: auto;
+        align-self: flex-end;
+    }
+    
+    .properties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Property Detail */
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-sidebar {
+        position: static;
+    }
+    
+    .amenities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Dashboard */
+    .sidebar {
+        width: 80px;
+    }
+    
+    .sidebar-brand .brand-name,
+    .menu-label,
+    .user-details {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 80px;
+    }
+    
+    .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .properties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Checkout */
+    .checkout-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   LARGE DESKTOP - 1440px+
+   ============================================ */
+
+@media (min-width: 1440px) {
+    .container,
+    .nav-container,
+    .main-container,
+    .detail-container,
+    .checkout-container {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .properties-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES FOR RESPONSIVE
+   ============================================ */
+
+.hide-mobile {
+    display: block;
+}
+
+.show-mobile {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .hide-mobile {
+        display: none !important;
+    }
+    
+    .show-mobile {
+        display: block !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .flex-mobile {
+        flex-direction: column;
+    }
+    
+    .grid-mobile {
+        grid-template-columns: 1fr;
+    }
+    
+    .text-center-mobile {
+        text-align: center;
+    }
+    
+    .w-full-mobile {
+        width: 100%;
+    }
+    
+    .p-mobile {
+        padding: 1rem;
+    }
+    
+    .m-auto-mobile {
+        margin: auto;
+    }
+}
+
+/* Smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 767px) {
+    a,
+    button,
+    input,
+    select,
+    .menu-item {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}

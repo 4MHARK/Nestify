@@ -398,3 +398,168 @@ Divider * .divider {
     border-color: var(--primary-blue);
     background: #eef2ff;
 }
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+    .modal-card {
+        margin: 1rem;
+        padding: 1.5rem;
+        max-width: calc(100% - 2rem);
+    }
+    
+    .tab-container {
+        flex: 1;
+    }
+    
+    .tab {
+        flex: 1;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .form-container {
+        margin-top: 1.5rem;
+    }
+    
+    .form-title {
+        font-size: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+        font-size: 0.875rem;
+    }
+    
+    .form-group input {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .role-options {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .role-option label {
+        padding: 0.75rem 1rem;
+    }
+    
+    .file-upload-box {
+        padding: 1rem;
+    }
+    
+    .btn-submit {
+        padding: 1rem;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+    .modal-overlay {
+        align-items: flex-start;
+        padding-top: 1rem;
+    }
+    
+    .modal-card {
+        margin: 0.5rem;
+        padding: 1rem;
+        border-radius: 0.75rem;
+    }
+    
+    .modal-close {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .modal-close .material-symbols-outlined {
+        font-size: 1.25rem;
+    }
+    
+    .tab-container {
+        gap: 0.5rem;
+    }
+    
+    .tab {
+        padding: 0.625rem 0.375rem;
+        font-size: 0.75rem;
+    }
+    
+    .form-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .form-title + p {
+        font-size: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 0.75rem;
+    }
+    
+    .form-group label {
+        font-size: 0.75rem;
+        margin-bottom: 0.375rem;
+    }
+    
+    .form-group input {
+        padding: 0.5rem 0.625rem;
+        font-size: 0.75rem;
+    }
+    
+    .forgot-password {
+        font-size: 0.625rem;
+        margin-bottom: 1rem;
+    }
+    
+    .agree {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+    
+    .agree input[type="radio"] {
+        margin-top: 0.25rem;
+    }
+    
+    .agree p {
+        font-size: 0.625rem;
+        line-height: 1.4;
+    }
+    
+    .btn-submit {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    #landlord-upload {
+        margin-top: 0.75rem;
+    }
+    
+    .file-upload-box {
+        padding: 0.75rem;
+    }
+    
+    .file-upload-box p {
+        font-size: 0.625rem;
+    }
+    
+    .file-upload-box small {
+        font-size: 0.5rem;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+    .modal-card {
+        max-width: 480px;
+    }
+}

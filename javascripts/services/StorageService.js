@@ -153,6 +153,7 @@ class StorageService {
     }
 
     static initializeSeedData() {
+        // Always ensure we have the seed users if no users exist
         if (StorageService.getUsers().length === 0) {
             const seedUsers = [
                 {
@@ -212,7 +213,7 @@ class StorageService {
                     propertyId: 'prop_1',
                     tenantId: 'seed_tenant_1',
                     status: 'pending',
-                    message: 'Interested in scheduling a viewing',
+                    message: 'I would love to schedule a viewing for this property. Please let me know your availability.',
                     createdAt: new Date().toISOString()
                 }
             ];
@@ -222,7 +223,7 @@ class StorageService {
                     id: 'msg_1',
                     senderId: 'seed_tenant_1',
                     receiverId: 'seed_landlord_1',
-                    content: 'Hi, I am interested in your property.',
+                    content: 'Hi, I am interested in your property and would like to schedule a viewing.',
                     timestamp: new Date().toISOString(),
                     read: false
                 },
@@ -230,7 +231,7 @@ class StorageService {
                     id: 'msg_2',
                     senderId: 'seed_landlord_1',
                     receiverId: 'seed_tenant_1',
-                    content: 'Thank you! Would you like to schedule a viewing?',
+                    content: 'Thank you! Would you like to schedule a viewing? I am available this weekend.',
                     timestamp: new Date().toISOString(),
                     read: false
                 }
@@ -242,6 +243,47 @@ class StorageService {
             StorageService.set(STORAGE_KEYS.MESSAGES, seedMessages);
             
             console.log('Seed data initialized');
+        } else {
+            // Check if we need to add sample data for the current landlord
+            const currentUser = StorageService.getCurrentUser();
+            if (currentUser && currentUser.role === 'landlord') {
+                // Check if landlord has any properties
+                const properties = StorageService.getPropertiesByOwner(currentUser.id);
+                if (properties.length === 0) {
+                    // Add sample property for this landlord
+                    const sampleProperty = {
+                        id: 'prop_' + Date.now(),
+                        ownerId: currentUser.id,
+                        title: 'Sample Property',
+                        description: 'A nice property to get started',
+                        price: 250000,
+                        type: 'apartment',
+                        bedrooms: 2,
+                        bathrooms: 2,
+                        sqft: 1200,
+                        address: '123 Sample St, City, State 12345',
+                        status: 'available',
+                        createdAt: new Date().toISOString(),
+                        images: ['./img/card1.jpg']
+                    };
+                    StorageService.saveProperty(sampleProperty);
+                    
+                    // Add a sample booking from seed tenant if exists
+                    const users = StorageService.getUsers();
+                    const tenant = users.find(u => u.role === 'tenant');
+                    if (tenant) {
+                        const sampleBooking = {
+                            id: 'book_' + Date.now(),
+                            propertyId: sampleProperty.id,
+                            tenantId: tenant.id,
+                            status: 'pending',
+                            message: 'I would love to schedule a viewing for this property. Please let me know your availability.',
+                            createdAt: new Date().toISOString()
+                        };
+                        StorageService.saveBooking(sampleBooking);
+                    }
+                }
+            }
         }
     }
 }
