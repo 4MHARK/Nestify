@@ -79,7 +79,7 @@ function loadLandlordProperties() {
             <div class="property-content">
                 <div class="property-price">
                     $${property.price.toLocaleString()}
-                    <span>/ ${property.type}</span>
+                    <span>/ ${property.type === 'rent' ? (property.pricePeriod || 'month') : property.type}</span>
                 </div>
                 <h3 class="property-title">${property.title}</h3>
                 <p class="property-location">
@@ -112,6 +112,7 @@ function openPropertyModal() {
 function closePropertyModal() {
     document.getElementById('propertyModal').classList.remove('active');
     document.body.style.overflow = '';
+    resetPropertyModal();
 }
 
 // Compress image to base64
@@ -144,11 +145,13 @@ function compressImage(file, maxWidth = 800, quality = 0.7) {
     });
 }
 
-// Add new property
+// Add new property (also handles edit)
 async function addProperty(e) {
     e.preventDefault();
     
     const session = JSON.parse(localStorage.getItem('nestify_session'));
+    const propertyId = document.getElementById('property-id').value;
+    const isEditing = propertyId !== '';
     
     // Get selected amenities
     const amenities = [];
@@ -156,59 +159,110 @@ async function addProperty(e) {
         amenities.push(checkbox.value);
     });
     
-    // Handle image upload with compression
+    // Handle image upload
     const imageFiles = document.getElementById('property-images').files;
+    let finalImages = [];
     
-    if (imageFiles.length < 2) {
-        alert('Please upload at least 2 images');
-        return;
+    if (isEditing) {
+        // When editing: combine kept current images + new uploads
+        finalImages = [...currentEditingImages];
+        
+        // Add new images if any uploaded
+        if (imageFiles.length > 0) {
+            for (let file of imageFiles) {
+                const compressed = await compressImage(file);
+                finalImages.push(compressed);
+            }
+        }
+        
+        // Validate total images
+        if (finalImages.length < 2) {
+            alert('Please have at least 2 images total');
+            return;
+        }
+        
+        if (finalImages.length > 5) {
+            alert('Maximum 5 images allowed');
+            return;
+        }
+    } else {
+        // When adding new: require 2-5 images
+        if (imageFiles.length < 2) {
+            alert('Please upload at least 2 images');
+            return;
+        }
+        
+        if (imageFiles.length > 5) {
+            alert('Maximum 5 images allowed');
+            return;
+        }
+        
+        // Compress all images for new property
+        for (let file of imageFiles) {
+            const compressed = await compressImage(file);
+            finalImages.push(compressed);
+        }
     }
     
-    if (imageFiles.length > 5) {
-        alert('Maximum 5 images allowed');
-        return;
+    // Get existing properties
+    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
+    
+    if (isEditing) {
+        // Update existing property - only editable fields
+        const propertyIndex = properties.findIndex(p => p.id === parseInt(propertyId));
+        if (propertyIndex !== -1) {
+            properties[propertyIndex].title = document.getElementById('property-title').value;
+            properties[propertyIndex].price = parseInt(document.getElementById('property-price').value);
+            properties[propertyIndex].bedrooms = parseInt(document.getElementById('property-bedrooms').value);
+            properties[propertyIndex].bathrooms = parseInt(document.getElementById('property-bathrooms').value);
+            properties[propertyIndex].images = finalImages;
+            properties[propertyIndex].amenities = amenities;
+            properties[propertyIndex].pricePeriod = document.getElementById('property-type').value === 'rent' 
+                ? document.getElementById('price-period').value 
+                : 'month';
+        }
+    } else {
+        // Create new property
+        const landlordProperties = properties.filter(p => p.landlordId === session.userId);
+        const shouldFeature = landlordProperties.length < 4;
+        
+        const property = {
+            id: Date.now(),
+            landlordId: session.userId,
+            title: document.getElementById('property-title').value,
+            type: document.getElementById('property-type').value,
+            price: parseInt(document.getElementById('property-price').value),
+            location: document.getElementById('property-location').value,
+            bedrooms: parseInt(document.getElementById('property-bedrooms').value),
+            bathrooms: parseInt(document.getElementById('property-bathrooms').value),
+            sqft: parseInt(document.getElementById('property-sqft').value) || 0,
+            images: finalImages,
+            amenities: amenities,
+            pricePeriod: document.getElementById('property-type').value === 'rent' 
+                ? document.getElementById('price-period').value 
+                : 'month',
+            featured: shouldFeature,
+            createdAt: new Date().toISOString()
+        };
+        
+        properties.push(property);
     }
-    
-    // Compress all images
-    const images = [];
-    for (let file of imageFiles) {
-        const compressed = await compressImage(file);
-        images.push(compressed);
-    }
-    
-    // Check existing properties to determine if this should be featured
-    const existingProperties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
-    const landlordProperties = existingProperties.filter(p => p.landlordId === session.userId);
-    const shouldFeature = landlordProperties.length < 4; // First 4 properties are featured
-    
-    const property = {
-        id: Date.now(),
-        landlordId: session.userId,
-        title: document.getElementById('property-title').value,
-        type: document.getElementById('property-type').value,
-        price: parseInt(document.getElementById('property-price').value),
-        location: document.getElementById('property-location').value,
-        bedrooms: parseInt(document.getElementById('property-bedrooms').value),
-        bathrooms: parseInt(document.getElementById('property-bathrooms').value),
-        sqft: parseInt(document.getElementById('property-sqft').value) || 0,
-        images: images,
-        amenities: amenities,
-        featured: shouldFeature,
-        createdAt: new Date().toISOString()
-    };
     
     // Save to localStorage
-    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
-    properties.push(property);
     localStorage.setItem('nestify_properties', JSON.stringify(properties));
     
     // Close modal and reload
     closePropertyModal();
+    resetPropertyModal();
     document.getElementById('addPropertyForm').reset();
     loadLandlordProperties();
     renderFinance();
     
-    alert('Property added successfully!' + (shouldFeature ? ' (Featured)' : ''));
+    if (isEditing) {
+        alert('Property updated successfully!');
+    } else {
+        alert('Property added successfully!');
+    }
 }
 
 // Delete property
@@ -224,9 +278,114 @@ function deleteProperty(id) {
     alert('Property deleted!');
 }
 
-// Edit property (placeholder)
+// Track current images when editing
+let currentEditingImages = [];
+
+// Edit property
 function editProperty(id) {
-    alert('Edit functionality coming soon!');
+    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
+    const property = properties.find(p => p.id === id);
+    
+    if (!property) return;
+    
+    // Set property ID for editing
+    document.getElementById('property-id').value = id;
+    
+    // Populate form fields (all fields for display, editable ones for editing)
+    document.getElementById('property-title').value = property.title;
+    document.getElementById('property-type').value = property.type;
+    document.getElementById('property-price').value = property.price;
+    document.getElementById('property-location').value = property.location;
+    document.getElementById('property-bedrooms').value = property.bedrooms;
+    document.getElementById('property-bathrooms').value = property.bathrooms;
+    document.getElementById('property-sqft').value = property.sqft || '';
+    
+    // Handle price period
+    const pricePeriodGroup = document.getElementById('price-period-group');
+    if (property.type === 'rent') {
+        pricePeriodGroup.style.display = 'block';
+        document.getElementById('price-period').value = property.pricePeriod || 'month';
+    } else {
+        pricePeriodGroup.style.display = 'none';
+    }
+    
+    // Make non-editable fields readonly/disabled when editing
+    document.getElementById('property-title').setAttribute('readonly', 'readonly');
+    document.getElementById('property-title').classList.add('readonly-field');
+    document.getElementById('property-type').setAttribute('disabled', 'disabled');
+    document.getElementById('property-location').setAttribute('readonly', 'readonly');
+    document.getElementById('property-location').classList.add('readonly-field');
+    document.getElementById('property-sqft').setAttribute('readonly', 'readonly');
+    document.getElementById('property-sqft').classList.add('readonly-field');
+    
+    // Store current images (handle both old single image and new array format)
+    if (property.images && Array.isArray(property.images)) {
+        currentEditingImages = [...property.images];
+    } else if (property.image) {
+        currentEditingImages = [property.image];
+    } else {
+        currentEditingImages = [];
+    }
+    
+    // Show current images
+    showCurrentImages();
+    
+    // Set amenities checkboxes
+    document.querySelectorAll('input[name="amenities"]').forEach(checkbox => {
+        checkbox.checked = property.amenities && property.amenities.includes(checkbox.value);
+    });
+    
+    // Update modal for editing mode
+    document.querySelector('.form-title').textContent = 'Edit Property';
+    document.querySelector('.btn-submit').textContent = 'Update Property';
+    
+    // Make file input not required when editing
+    document.getElementById('property-images').removeAttribute('required');
+    
+    // Open modal
+    openPropertyModal();
+}
+
+// Show current images in the modal
+function showCurrentImages() {
+    const container = document.getElementById('current-images');
+    container.innerHTML = currentEditingImages.map((img, index) => `
+        <div class="current-image-item">
+            <img src="${img}" alt="Property image ${index + 1}">
+            <button type="button" class="remove-image" onclick="removeCurrentImage(${index})">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+// Remove current image
+function removeCurrentImage(index) {
+    currentEditingImages.splice(index, 1);
+    showCurrentImages();
+}
+
+// Reset property modal
+function resetPropertyModal() {
+    document.getElementById('property-id').value = '';
+    document.getElementById('addPropertyForm').reset();
+    document.getElementById('current-images').innerHTML = '';
+    currentEditingImages = [];
+    document.querySelector('.form-title').textContent = 'Add New Property';
+    document.querySelector('.btn-submit').textContent = 'Add Property';
+    document.getElementById('property-images').setAttribute('required', 'required');
+    
+    // Remove readonly/disabled from fields
+    document.getElementById('property-title').removeAttribute('readonly');
+    document.getElementById('property-title').classList.remove('readonly-field');
+    document.getElementById('property-type').removeAttribute('disabled');
+    document.getElementById('property-location').removeAttribute('readonly');
+    document.getElementById('property-location').classList.remove('readonly-field');
+    document.getElementById('property-sqft').removeAttribute('readonly');
+    document.getElementById('property-sqft').classList.remove('readonly-field');
+    
+    // Hide price period
+    document.getElementById('price-period-group').style.display = 'none';
 }
 
 // Navigation between sections
@@ -472,6 +631,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const sectionId = href.replace('#', '');
             showSection(sectionId);
         });
+    });
+    
+    // Property type change - show/hide price period
+    document.getElementById('property-type')?.addEventListener('change', function() {
+        const pricePeriodGroup = document.getElementById('price-period-group');
+        if (this.value === 'rent') {
+            pricePeriodGroup.style.display = 'block';
+        } else {
+            pricePeriodGroup.style.display = 'none';
+        }
     });
     
     // Modal event listeners

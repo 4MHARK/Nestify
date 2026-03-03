@@ -71,7 +71,7 @@ function renderPropertyGrid(containerId, properties) {
 // Create property card HTML
 function createPropertyCard(property) {
     const price = property.type === 'rent' 
-        ? `$${property.price.toLocaleString()}/mo` 
+        ? `$${property.price.toLocaleString()}/${property.pricePeriod || 'month'}` 
         : `$${property.price.toLocaleString()}`;
     
     const badgeLabel = property.type === 'rent' ? 'For Rent' : 'For Sale';

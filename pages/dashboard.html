@@ -184,6 +184,8 @@
             <h2 class="form-title">Add New Property</h2>
             
             <form id="addPropertyForm">
+                <input type="hidden" id="property-id">
+                
                 <div class="form-group">
                     <label for="property-title">Property Title</label>
                     <input type="text" id="property-title" placeholder="e.g. Modern Family Home" required>
@@ -201,6 +203,13 @@
                     <div class="form-group">
                         <label for="property-price">Price ($)</label>
                         <input type="number" id="property-price" placeholder="e.g. 450000" required>
+                    </div>
+                    <div class="form-group" id="price-period-group" style="display: none;">
+                        <label for="price-period">Price Period</label>
+                        <select id="price-period">
+                            <option value="month">Per Month</option>
+                            <option value="year">Per Year</option>
+                        </select>
                     </div>
                 </div>
 
@@ -225,9 +234,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="property-images">Property Images (min 2, max 5)</label>
-                    <input type="file" id="property-images" accept="image/*" multiple required>
-                    <p class="upload-hint">Upload 2-5 images</p>
+                    <label>Current Images</label>
+                    <div id="current-images" class="current-images-grid"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="property-images">Add More Images (min 2, max 5 total)</label>
+                    <input type="file" id="property-images" accept="image/*" multiple>
+                    <p class="upload-hint">Upload additional images (optional)</p>
                 </div>
 
                 <div class="form-group">

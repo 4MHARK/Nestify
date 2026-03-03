@@ -413,6 +413,55 @@
     color: var(--gray-dark);
 }
 
+/* Readonly fields */
+.property-modal-card .readonly-field {
+    background-color: var(--light-50);
+    color: var(--gray);
+    cursor: not-allowed;
+}
+
+/* Current images grid */
+.current-images-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.current-image-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.current-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.current-image-item .remove-image {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.current-image-item .remove-image:hover {
+    background: var(--danger);
+}
+
 /* Stats Grid */
 .stats-grid {
     display: grid;
