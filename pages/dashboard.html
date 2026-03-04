@@ -26,7 +26,7 @@
             </div>
 
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active">
+                <a href="#dashboard" class="nav-item active">
                     <i class="fas fa-th-large"></i>
                     <span>Dashboard</span>
                 </a>
@@ -54,7 +54,7 @@
 
             <div class="sidebar-footer">
                 <div class="user-info">
-                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div class="user-avatar" id="user-avatar"></div>
                     <div class="user-details">
                         <span class="user-name" id="user-name">User</span>
                         <span class="user-role">Landlord</span>
@@ -68,61 +68,108 @@
 
         <!-- Main Content -->
         <main class="dashboard-main">
-            <header class="dashboard-header">
-                <h1>Welcome back, <span id="welcome-name">User</span></h1>
-                <button class="btn btn-primary" id="add-property-btn">
-                    <i class="fas fa-plus"></i> Add Property
-                </button>
-            </header>
+            <!-- Dashboard Overview (shown by default) -->
+            <div id="dashboard-overview">
+                <header class="dashboard-header">
+                    <h1>Welcome back, <span id="welcome-name">User</span></h1>
+                    <button class="btn btn-primary" id="add-property-btn">
+                        <i class="fas fa-plus"></i> Add Property
+                    </button>
+                </header>
 
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-building"></i>
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="total-properties">0</span>
+                            <span class="stat-label">Properties</span>
+                        </div>
                     </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="total-properties">0</span>
-                        <span class="stat-label">Properties</span>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="active-bookings">0</span>
+                            <span class="stat-label">Active Bookings</span>
+                        </div>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-check"></i>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="total-revenue">$0</span>
+                            <span class="stat-label">Total Revenue</span>
+                        </div>
                     </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="active-bookings">0</span>
-                        <span class="stat-label">Active Bookings</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="total-revenue">$0</span>
-                        <span class="stat-label">Total Revenue</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="total-tenants">0</span>
-                        <span class="stat-label">Tenants</span>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="total-tenants">0</span>
+                            <span class="stat-label">Tenants</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- My Properties Section -->
-            <section class="properties-section">
+            <section class="properties-section" id="properties-section">
                 <div class="section-header">
                     <h2>My Properties</h2>
                     <p>Manage your property listings</p>
                 </div>
                 <div class="property-grid" id="my-properties">
                     <!-- Properties will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section class="dashboard-section" id="bookings-section">
+                <div class="section-header">
+                    <h2>Bookings</h2>
+                    <p>Manage property bookings</p>
+                </div>
+                <div class="dashboard-content" id="bookings-list">
+                    <!-- Bookings will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section class="dashboard-section" id="messages-section">
+                <div class="section-header">
+                    <h2>Messages</h2>
+                    <p>Messages from potential tenants and buyers</p>
+                </div>
+                <div class="dashboard-content" id="messages-list">
+                    <!-- Messages will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Tenants Section -->
+            <section class="dashboard-section" id="tenants-section">
+                <div class="section-header">
+                    <h2>Tenants</h2>
+                    <p>Manage your tenants</p>
+                </div>
+                <div class="dashboard-content" id="tenants-list">
+                    <!-- Tenants will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Finance Section -->
+            <section class="dashboard-section" id="finance-section">
+                <div class="section-header">
+                    <h2>Finance</h2>
+                    <p>Your property portfolio overview</p>
+                </div>
+                <div class="finance-grid" id="finance-stats">
+                    <!-- Finance stats will be rendered here -->
                 </div>
             </section>
         </main>
@@ -137,6 +184,8 @@
             <h2 class="form-title">Add New Property</h2>
             
             <form id="addPropertyForm">
+                <input type="hidden" id="property-id">
+                
                 <div class="form-group">
                     <label for="property-title">Property Title</label>
                     <input type="text" id="property-title" placeholder="e.g. Modern Family Home" required>
@@ -154,6 +203,13 @@
                     <div class="form-group">
                         <label for="property-price">Price ($)</label>
                         <input type="number" id="property-price" placeholder="e.g. 450000" required>
+                    </div>
+                    <div class="form-group" id="price-period-group" style="display: none;">
+                        <label for="price-period">Price Period</label>
+                        <select id="price-period">
+                            <option value="month">Per Month</option>
+                            <option value="year">Per Year</option>
+                        </select>
                     </div>
                 </div>
 
@@ -178,8 +234,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="property-image">Image URL</label>
-                    <input type="url" id="property-image" placeholder="https://example.com/image.jpg" required>
+                    <label>Current Images</label>
+                    <div id="current-images" class="current-images-grid"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="property-images">Add More Images (min 2, max 5 total)</label>
+                    <input type="file" id="property-images" accept="image/*" multiple>
+                    <p class="upload-hint">Upload additional images (optional)</p>
                 </div>
 
                 <div class="form-group">

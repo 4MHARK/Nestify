@@ -17,8 +17,8 @@ function loadHomePageProperties() {
         new Date(b.createdAt) - new Date(a.createdAt)
     );
     
-    // Get featured properties (newest 3)
-    const featured = sortedProperties.slice(0, 3);
+    // Get featured properties (newest 4)
+    const featured = sortedProperties.slice(0, 4);
     
     // Get properties for sale
     const forSale = sortedProperties.filter(p => p.type === 'sale');
@@ -28,8 +28,8 @@ function loadHomePageProperties() {
     
     // Render each section
     renderPropertyGrid('featured-properties', featured);
-    renderPropertyGrid('sale-properties', forSale.slice(0, 3));
-    renderPropertyGrid('rent-properties', forRent.slice(0, 3));
+    renderPropertyGrid('sale-properties', forSale.slice(0, 4));
+    renderPropertyGrid('rent-properties', forRent.slice(0, 4));
 }
 
 // Render empty state
@@ -71,7 +71,7 @@ function renderPropertyGrid(containerId, properties) {
 // Create property card HTML
 function createPropertyCard(property) {
     const price = property.type === 'rent' 
-        ? `$${property.price.toLocaleString()}/mo` 
+        ? `$${property.price.toLocaleString()}/${property.pricePeriod || 'month'}` 
         : `$${property.price.toLocaleString()}`;
     
     const badgeLabel = property.type === 'rent' ? 'For Rent' : 'For Sale';
@@ -79,7 +79,7 @@ function createPropertyCard(property) {
     return `
         <div class="property-card" onclick="handlePropertyClick(${property.id})">
             <div class="property-image">
-                <img src="${property.image}" alt="${property.title}" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                <img src="${property.images ? property.images[0] : property.image}" alt="${property.title}" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                 <div class="property-badges">
                     <span class="property-badge badge-${property.type}">${badgeLabel}</span>
                 </div>
