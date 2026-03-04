@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/property-detail.css">
+    <link rel="stylesheet" href="../media-query.css">
+    <title>Property Details - Nestify</title>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <section>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a href="../index.html" class="logo">
+                        <i class="fas fa-home"></i> <span>Nestify</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../index.html">Home</a>
+                        <a href="../properties.html">Properties</a>
+                        <a href="../about.html">About</a>
+                        <a href="../contact.html">Contact</a>
+                    </div>
+
+                    <div class="nav-actions">
+                        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <div id="nav-auth">
+                            <a href="#" class="btn btn-ghost open-auth-modal">Login</a>
+                            <a href="#" class="btn btn-primary open-auth-modal" data-tab="register">Sign Up</a>
+                        </div>
+                        <div class="user-menu" id="user-menu" style="display:none;">
+                            <button class="user-btn">
+                                <div class="user-avatar" id="user-avatar">U</div>
+                                <span id="user-name">User</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="user-dropdown">
+                                <div class="user-dropdown-header">
+                                    <h4 id="dropdown-name">User</h4>
+                                    <p id="dropdown-email">user@email.com</p>
+                                </div>
+                                <a href="../pages/dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                                <a href="#" onclick="Auth.logout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </section>
+
+    <!-- PROPERTY DETAIL -->
+    <section class="property-detail-section">
+        <div class="container">
+            <!-- Back Button -->
+            <a href="../index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Properties
+            </a>
+
+            <!-- Property Gallery -->
+            <div class="property-gallery">
+                <div class="gallery-main">
+                    <img id="main-image" src="" alt="Property Image">
+                    <div class="property-badges" id="property-badges">
+                        <!-- Badges will be injected here -->
+                    </div>
+                </div>
+                <div class="gallery-thumbnails" id="gallery-thumbnails">
+                    <!-- Thumbnails will be injected here -->
+                </div>
+            </div>
+
+            <div class="property-detail-grid">
+                <!-- Property Info -->
+                <div class="property-info-card">
+                    <div class="property-header">
+                        <div class="property-title-price">
+                            <h1 id="property-title">Property Title</h1>
+                            <div class="property-price" id="property-price">$0</div>
+                        </div>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="property-location">Location</span>
+                        </div>
+                    </div>
+
+                    <div class="property-features">
+                        <div class="feature-item">
+                            <i class="fas fa-bed"></i>
+                            <span id="property-bedrooms">0</span> Beds
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-bath"></i>
+                            <span id="property-bathrooms">0</span> Baths
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-ruler-combined"></i>
+                            <span id="property-sqft">0</span> sqft
+                        </div>
+                    </div>
+
+                    <!-- Amenities -->
+                    <div class="property-amenities">
+                        <h3>Amenities</h3>
+                        <div class="amenities-list" id="amenities-list">
+                            <!-- Amenities will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="property-description">
+                        <h3>Description</h3>
+                        <p id="property-description">No description available.</p>
+                    </div>
+
+                    <!-- Location Map -->
+                    <div class="property-location-section">
+                        <h3>Location</h3>
+                        <div class="map-container" id="map-container">
+                            <iframe 
+                                id="property-map"
+                                width="100%" 
+                                height="300" 
+                                style="border:0; border-radius: var(--radius);" 
+                                loading="lazy" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <!-- Rental Booking Form (For Rent properties) -->
+                    <div class="rental-booking-card" id="rental-booking-card" style="display: none;">
+                        <h3>Book This Property</h3>
+                        <p>Select your dates and number of guests</p>
+                        <form id="rentalBookingForm">
+                            <input type="hidden" id="rental-property-id">
+                            <div class="booking-dates">
+                                <div class="form-group">
+                                    <label for="check-in-date">Check-in</label>
+                                    <input type="date" id="check-in-date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="check-out-date">Check-out</label>
+                                    <input type="date" id="check-out-date" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="guests-count">Guests</label>
+                                <select id="guests-count" required>
+                                    <option value="">Select guests</option>
+                                    <option value="1">1 Guest</option>
+                                    <option value="2">2 Guests</option>
+                                    <option value="3">3 Guests</option>
+                                    <option value="4">4 Guests</option>
+                                    <option value="5">5+ Guests</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="rental-notes">Notes (optional)</label>
+                                <textarea id="rental-notes" placeholder="Any special requests..." rows="2"></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-calendar-check"></i> Request to Book
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Purchase Booking Form (For Sale properties) -->
+                    <div class="purchase-booking-card" id="purchase-booking-card" style="display: none;">
+                        <h3>Interested in Buying?</h3>
+                        <p>Submit a purchase request</p>
+                        <form id="purchaseBookingForm">
+                            <input type="hidden" id="purchase-property-id">
+                            <div class="form-group">
+                                <label for="buyer-name">Full Name</label>
+                                <input type="text" id="buyer-name" placeholder="Your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="buyer-email">Email</label>
+                                <input type="email" id="buyer-email" placeholder="Your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="buyer-phone">Phone</label>
+                                <input type="tel" id="buyer-phone" placeholder="Your phone number">
+                            </div>
+                            <div class="form-group">
+                                <label for="buyer-message">Message</label>
+                                <textarea id="buyer-message" placeholder="Any questions or details..." rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-home"></i> Request to Buy
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="property-sidebar">
+                    <!-- Owner Actions (for landlord) -->
+                    <div class="owner-actions" id="owner-actions" style="display: none;">
+                        <h3>Manage Property</h3>
+                        <button class="btn btn-primary" onclick="editThisProperty()">
+                            <i class="fas fa-edit"></i> Edit Property
+                        </button>
+                        <button class="btn btn-outline" id="toggle-status-btn" onclick="togglePropertyStatus()">
+                            <i class="fas fa-toggle-on"></i> Mark as Inactive
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteThisProperty()">
+                            <i class="fas fa-trash"></i> Delete Property
+                        </button>
+                    </div>
+
+                    <!-- Contact Form (for non-owners) -->
+                    <div class="contact-card" id="contact-card">
+                        <h3>Interested in this property?</h3>
+                        <p>Contact the landlord directly</p>
+                        <button class="btn btn-primary btn-block" onclick="openMessageModal()">
+                            <i class="fas fa-comment-dots"></i> Send Message
+                        </button>
+                        <button class="btn btn-outline btn-block" onclick="openBookingModal()">
+                            <i class="fas fa-calendar"></i> Schedule Viewing
+                        </button>
+                    </div>
+
+                    <!-- Landlord Info -->
+                    <div class="landlord-card">
+                        <h3>Listed by</h3>
+                        <div class="landlord-info">
+                            <div class="landlord-avatar" id="landlord-avatar">L</div>
+                            <div class="landlord-details">
+                                <h4 id="landlord-name">Landlord Name</h4>
+                                <p id="landlord-since">Property Landlord</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Similar Properties -->
+            <div class="similar-properties" id="similar-properties" style="display: none;">
+                <h2>Similar Properties</h2>
+                <div class="property-grid" id="similar-properties-grid">
+                    <!-- Similar properties will be injected here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Modal -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeContactModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="form-title">Contact Landlord</h2>
+            <form id="contactForm">
+                <input type="hidden" id="contact-property-id">
+                <div class="form-group">
+                    <label for="contact-name">Your Name</label>
+                    <input type="text" id="contact-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-email">Email</label>
+                    <input type="email" id="contact-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-phone">Phone</label>
+                    <input type="tel" id="contact-phone" placeholder="Enter your phone">
+                </div>
+                <div class="form-group">
+                    <label for="contact-message">Message</label>
+                    <textarea id="contact-message" placeholder="I'm interested in this property..." rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeBookingModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="form-title">Schedule Viewing</h2>
+            <form id="bookingForm">
+                <input type="hidden" id="booking-property-id">
+                <div class="form-group">
+                    <label for="booking-name">Your Name</label>
+                    <input type="text" id="booking-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-email">Email</label>
+                    <input type="email" id="booking-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-phone">Phone</label>
+                    <input type="tel" id="booking-phone" placeholder="Enter your phone">
+                </div>
+                <div class="form-group">
+                    <label for="booking-date">Preferred Date</label>
+                    <input type="date" id="booking-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-notes">Notes</label>
+                    <textarea id="booking-notes" placeholder="Any special requests..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Request Viewing</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal-overlay" id="messageModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeMessageModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="form-title">Send Message</h2>
+            <form id="messageForm">
+                <input type="hidden" id="message-property-id">
+                <div class="form-group">
+                    <label for="message-name">Your Name</label>
+                    <input type="text" id="message-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="message-email">Email</label>
+                    <input type="email" id="message-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message-text">Message</label>
+                    <textarea id="message-text" placeholder="Write your message to the landlord..." rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <section>
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="../index.html" class="logo">
+                            <i class="fas fa-home"></i> <span>Nestify</span>
+                        </a>
+                        <p>Find your perfect home with Nestify. We help you discover the best properties for sale and rent.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <a href="../index.html">Home</a>
+                        <a href="../properties.html">Properties</a>
+                        <a href="../about.html">About</a>
+                        <a href="../contact.html">Contact</a>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Account</h4>
+                        <a href="#" class="open-auth-modal" data-tab="signin">Login</a>
+                        <a href="#" class="open-auth-modal" data-tab="register">Sign Up</a>
+                        <a href="../pages/dashboard.html">Dashboard</a>
+                    </div>
+                    <div class="footer-contact">
+                        <h4>Contact</h4>
+                        <p><i class="fas fa-envelope"></i> info@nestify.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, NY</p>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Nestify. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <script src="../javascripts/auth.js"></script>
+    <script src="../javascripts/property-detail.js"></script>
+</body>
+
+</html>

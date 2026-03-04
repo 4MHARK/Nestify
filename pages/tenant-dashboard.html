@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/tenant-dashboard.css">
+    <link rel="stylesheet" href="../media-query.css">
+    <title>Dashboard - Nestify</title>
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-home"></i> <span>Nestify</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#bookings" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>My Bookings</span>
+                </a>
+                <a href="#favorites" class="nav-item">
+                    <i class="fas fa-heart"></i>
+                    <span>Favorites</span>
+                </a>
+                <a href="#messages" class="nav-item">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#profile" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
+                </a>
+                <a href="../properties.html" class="nav-item">
+                    <i class="fas fa-search"></i>
+                    <span>Browse Properties</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar"></div>
+                    <div class="user-details">
+                        <span class="user-name" id="user-name">User</span>
+                        <span class="user-role">Tenant</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="Auth.logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Dashboard Overview -->
+            <div id="dashboard-overview">
+                <header class="dashboard-header">
+                    <h1>Welcome back, <span id="welcome-name">User</span></h1>
+                    <a href="../properties.html" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Browse Properties
+                    </a>
+                </header>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="total-favorites">0</span>
+                            <span class="stat-label">Favorites</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="active-bookings">0</span>
+                            <span class="stat-label">Active Bookings</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="unread-messages">0</span>
+                            <span class="stat-label">Unread Messages</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" id="total-properties">0</span>
+                            <span class="stat-label">Available Properties</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <section class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="action-cards">
+                        <a href="../properties.html" class="action-card">
+                            <i class="fas fa-search"></i>
+                            <span>Browse Properties</span>
+                        </a>
+                        <a href="#favorites" class="action-card" onclick="showSection('favorites')">
+                            <i class="fas fa-heart"></i>
+                            <span>My Favorites</span>
+                        </a>
+                        <a href="#bookings" class="action-card" onclick="showSection('bookings')">
+                            <i class="fas fa-calendar"></i>
+                            <span>My Bookings</span>
+                        </a>
+                    </div>
+                </section>
+            </div>
+
+            <!-- My Bookings Section -->
+            <section class="dashboard-section" id="bookings-section">
+                <div class="section-header">
+                    <h2>My Bookings</h2>
+                    <p>Your scheduled property viewings</p>
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all" onclick="filterBookings('all')">All</button>
+                    <button class="filter-tab" data-filter="pending" onclick="filterBookings('pending')">Pending</button>
+                    <button class="filter-tab" data-filter="confirmed" onclick="filterBookings('confirmed')">Confirmed</button>
+                    <button class="filter-tab" data-filter="completed" onclick="filterBookings('completed')">Completed</button>
+                    <button class="filter-tab" data-filter="declined" onclick="filterBookings('declined')">Declined</button>
+                </div>
+                <div class="dashboard-content" id="bookings-list">
+                    <!-- Bookings will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Favorites Section -->
+            <section class="dashboard-section" id="favorites-section">
+                <div class="section-header">
+                    <h2>My Favorites</h2>
+                    <p>Properties you've saved</p>
+                </div>
+                <div class="property-grid" id="favorites-list">
+                    <!-- Favorites will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section class="dashboard-section" id="messages-section">
+                <div class="section-header">
+                    <h2>Messages</h2>
+                    <p>Messages from landlords</p>
+                </div>
+                <div class="dashboard-content" id="messages-list">
+                    <!-- Messages will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section class="dashboard-section" id="profile-section">
+                <div class="section-header">
+                    <h2>My Profile</h2>
+                    <p>Manage your account settings</p>
+                </div>
+                <div class="profile-card">
+                    <form id="profileForm">
+                        <div class="profile-avatar-section">
+                            <div class="profile-avatar" id="profile-avatar">U</div>
+                            <button type="button" class="btn btn-outline" onclick="document.getElementById('profile-avatar-input').click()">
+                                <i class="fas fa-camera"></i> Change Photo
+                            </button>
+                            <input type="file" id="profile-avatar-input" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-name">Full Name</label>
+                                <input type="text" id="profile-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-email">Email</label>
+                                <input type="email" id="profile-email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-phone">Phone</label>
+                                <input type="tel" id="profile-phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-password">New Password (leave blank to keep current)</label>
+                                <input type="password" id="profile-password" placeholder="Enter new password">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Message Detail Modal -->
+    <div class="modal-overlay" id="messageDetailModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeMessageModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="message-detail-content">
+                <div class="message-detail-header">
+                    <div class="message-avatar-large" id="message-sender-avatar">L</div>
+                    <div class="message-detail-info">
+                        <h3 id="message-sender-name">Landlord Name</h3>
+                        <p id="message-property-title">Property Title</p>
+                        <span class="message-date" id="message-date">Date</span>
+                    </div>
+                </div>
+                <div class="message-detail-body">
+                    <p id="message-content">Message content goes here...</p>
+                </div>
+                <div class="message-detail-contact">
+                    <p><i class="fas fa-envelope"></i> <span id="message-sender-email">email@example.com</span></p>
+                    <p><i class="fas fa-phone"></i> <span id="message-sender-phone">+1234567890</span></p>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="viewPropertyFromMessage()">
+                    <i class="fas fa-home"></i> View Property
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../javascripts/auth.js"></script>
+    <script src="../javascripts/tenants.js"></script>
+</body>
+
+</html>

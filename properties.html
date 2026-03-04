@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/properties.css">
+    <link rel="stylesheet" href="media-query.css">
+    <title>Properties - Nestify</title>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <section>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-home"></i> <span>Nestify</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="index.html">Home</a>
+                        <a href="properties.html" class="active">Properties</a>
+                        <a href="about.html">About</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+
+                    <div class="nav-actions">
+                        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <div id="nav-auth">
+                            <a href="#" class="btn btn-ghost open-auth-modal">Login</a>
+                            <a href="#" class="btn btn-primary open-auth-modal" data-tab="register">Sign Up</a>
+                        </div>
+                        <div class="user-menu" id="user-menu" style="display:none;">
+                            <button class="user-btn">
+                                <div class="user-avatar" id="user-avatar">U</div>
+                                <span id="user-name">User</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="user-dropdown">
+                                <div class="user-dropdown-header">
+                                    <h4 id="dropdown-name">User</h4>
+                                    <p id="dropdown-email">user@email.com</p>
+                                </div>
+                                <a href="pages/dashboard.html" id="dashboard-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                                <a href="#" onclick="Auth.logout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </section>
+
+    <!-- SEARCH & FILTERS -->
+    <section class="properties-search-section">
+        <div class="container">
+            <h1>Find Your Perfect Property</h1>
+            <p>Browse through our available properties</p>
+            
+            <div class="search-filters">
+                <div class="search-row">
+                    <div class="search-input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-location" placeholder="Search by location...">
+                    </div>
+                    
+                    <select id="filter-type">
+                        <option value="">All Types</option>
+                        <option value="sale">For Sale</option>
+                        <option value="rent">For Rent</option>
+                    </select>
+                    
+                    <select id="filter-bedrooms">
+                        <option value="">Any Bedrooms</option>
+                        <option value="1">1+ Bedrooms</option>
+                        <option value="2">2+ Bedrooms</option>
+                        <option value="3">3+ Bedrooms</option>
+                        <option value="4">4+ Bedrooms</option>
+                    </select>
+                    
+                    <input type="number" id="filter-min-price" placeholder="Min Price">
+                    
+                    <input type="number" id="filter-max-price" placeholder="Max Price">
+                    
+                    <select id="sort-by">
+                        <option value="newest">Newest First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                    
+                    <button class="btn btn-primary" onclick="applyFilters()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    
+                    <button class="btn btn-outline" onclick="clearFilters()">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="properties-section">
+        <div class="container">
+            <div class="results-header">
+                <p id="results-count">Showing all properties</p>
+            </div>
+            
+            <div class="property-grid" id="properties-grid">
+                <!-- Properties will be loaded here -->
+            </div>
+            
+            <div class="no-results" id="no-results" style="display: none;">
+                <i class="fas fa-home"></i>
+                <h3>No Properties Found</h3>
+                <p>Try adjusting your filters to see more results</p>
+                <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <section>
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-home"></i> <span>Nestify</span>
+                        </a>
+                        <p>Find your perfect home with Nestify.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <a href="index.html">Home</a>
+                        <a href="properties.html">Properties</a>
+                        <a href="about.html">About</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Account</h4>
+                        <a href="#" class="open-auth-modal" data-tab="signin">Login</a>
+                        <a href="#" class="open-auth-modal" data-tab="register">Sign Up</a>
+                    </div>
+                    <div class="footer-contact">
+                        <h4>Contact</h4>
+                        <p><i class="fas fa-envelope"></i> info@nestify.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Nestify. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <!-- AUTH MODAL -->
+    <section>
+        <div class="modal-overlay" id="authModal">
+            <div class="modal-card">
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="tab-container">
+                    <button class="tab active" data-tab="signin">Sign In</button>
+                    <button class="tab" data-tab="register">Create Account</button>
+                </div>
+
+                <div class="form-container">
+                    <!-- Sign In Form -->
+                    <div class="form-content active" id="signin">
+                        <h2 class="form-title">Welcome Back</h2>
+                        <form id="signinForm">
+                            <div class="form-group">
+                                <label for="signin-email">Email Address</label>
+                                <input type="email" placeholder="Enter Your Email" id="signin-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signin-password">Password</label>
+                                <input type="password" id="signin-password" placeholder="Enter your password" required>
+                            </div>
+                            <button type="submit" class="btn-submit">Login</button>
+                        </form>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div class="form-content" id="register">
+                        <h2 class="form-title">Create Your Account</h2>
+                        <p>Join Nestify to find your perfect property.</p>
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="register-name">Full Name</label>
+                                <input type="text" placeholder="Enter Your Full Name" id="register-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="register-email">Email Address</label>
+                                <input type="email" placeholder="Enter Email" id="register-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="register-phone">Phone Number</label>
+                                <input type="tel" placeholder="Enter Phone Number" id="register-phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="register-password">Password</label>
+                                <input type="password" id="register-password" placeholder="Create a password" required>
+                            </div>
+
+                            <div class="role-selection">
+                                <label>I am a:</label>
+                                <div class="role-options">
+                                    <div class="role-option">
+                                        <input type="radio" name="role" value="tenant" id="role-tenant" checked>
+                                        <label for="role-tenant">
+                                            <i class="fas fa-user"></i>
+                                            Tenant
+                                        </label>
+                                    </div>
+                                    <div class="role-option">
+                                        <input type="radio" name="role" value="landlord" id="role-landlord">
+                                        <label for="role-landlord">
+                                            <i class="fas fa-building"></i>
+                                            Landlord
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-submit">Create Account</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="javascripts/auth.js"></script>
+    <script src="javascripts/properties.js"></script>
+</body>
+
+</html>
