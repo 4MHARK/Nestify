@@ -121,9 +121,25 @@
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="fas fa-search"></i> Search
                     </button>
-                </form>
-            </div>
-        </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Forgot Password Form -->
+                    <div class="form-content" id="forgotpassword">
+                        <h2 class="form-title">Reset Password</h2>
+                        <p>Enter your email to receive a password reset link.</p>
+                        <form id="forgotPasswordForm">
+                            <div class="form-group">
+                                <label for="reset-email">Email Address</label>
+                                <input type="email" id="reset-email" placeholder="Enter your email" required>
+                            </div>
+                            <button type="submit" class="btn-submit">Send Reset Link</button>
+                            <p class="form-footer-text">
+                                <a href="#" onclick="switchTab('signin'); return false;">Back to Login</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
     </section>
 
 
@@ -247,6 +263,9 @@
                                 <input type="password" id="signin-password" placeholder="Enter your password" required>
                             </div>
                             <button type="submit" class="btn-submit">Login</button>
+                            <p class="form-footer-text">
+                                <a href="#" onclick="showResetPassword(); return false;">Forgot Password?</a>
+                            </p>
                         </form>
                     </div>
 
@@ -320,7 +339,7 @@
                         landlords with ease.</p>
                     <div class="footer-social">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#"><i class="fab fa-twitter-square"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>

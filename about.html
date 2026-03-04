@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Nestify - Your trusted partner in finding the perfect property">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="media-query.css">
+    <title>About Us - Nestify</title>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <section>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-home"></i> <span>Nestify</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="index.html">Home</a>
+                        <a href="properties.html">Properties</a>
+                        <a href="about.html" class="active">About</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="nav-actions">
+                        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <div id="nav-auth">
+                            <a href="#" class="btn btn-ghost open-auth-modal">Login</a>
+                            <a href="#" class="btn btn-primary open-auth-modal" data-tab="register">Sign Up</a>
+                        </div>
+                        <div class="user-menu" id="user-menu" style="display:none;">
+                            <button class="user-btn">
+                                <div class="user-avatar" id="user-avatar">U</div>
+                                <span id="user-name">User</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="user-dropdown">
+                                <div class="user-dropdown-header">
+                                    <h4 id="dropdown-name">User</h4>
+                                    <p id="dropdown-email">user@email.com</p>
+                                </div>
+                                <a href="pages/dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                                <a href="#" onclick="Auth.logout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="mobile-menu-btn" id="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </header>
+    </section>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>About Nestify</h1>
+            <p>Your trusted partner in finding the perfect property</p>
+        </div>
+    </section>
+
+    <!-- ABOUT CONTENT -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2>Who We Are</h2>
+                    <p>Nestify is a modern real estate platform designed to connect property seekers with their dream homes. Whether you're looking to rent, buy, or list a property, we provide a seamless experience for everyone.</p>
+                    <p>Founded in 2024, we aim to revolutionize the property marketplace by making it more accessible, transparent, and efficient for all parties involved.</p>
+                    
+                    <h3>Our Mission</h3>
+                    <p>To simplify the property search process and make finding the perfect home accessible to everyone, everywhere.</p>
+                    
+                    <h3>Our Values</h3>
+                    <ul class="values-list">
+                        <li><i class="fas fa-check-circle"></i> Transparency in all transactions</li>
+                        <li><i class="fas fa-check-circle"></i> Trust between landlords and tenants</li>
+                        <li><i class="fas fa-check-circle"></i> Innovation in property technology</li>
+                        <li><i class="fas fa-check-circle"></i> Customer satisfaction priority</li>
+                    </ul>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop" alt="Modern building">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-building"></i>
+                    <h3>500+</h3>
+                    <p>Properties Listed</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <h3>1000+</h3>
+                    <p>Happy Clients</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-handshake"></i>
+                    <h3>200+</h3>
+                    <p>Successful Deals</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-award"></i>
+                    <h3>50+</h3>
+                    <p>Partner Agencies</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="team-section">
+        <div class="container">
+            <h2>Our Leadership</h2>
+            <p class="section-subtitle">Meet the team behind Nestify</p>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4>John Smith</h4>
+                    <p>CEO & Founder</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4>Sarah Johnson</h4>
+                    <p>Head of Operations</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4>Michael Chen</h4>
+                    <p>Chief Technology Officer</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4>Emily Davis</h4>
+                    <p>Head of Marketing</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Find Your Dream Home?</h2>
+            <p>Join thousands of satisfied customers who found their perfect property with Nestify</p>
+            <div class="cta-buttons">
+                <a href="properties.html" class="btn btn-primary">Browse Properties</a>
+                <a href="contact.html" class="btn btn-outline">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <section>
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-home"></i> <span>Nestify</span>
+                        </a>
+                        <p>Your trusted partner in finding the perfect property. We connect buyers, sellers, tenants, and landlords with ease.</p>
+                        <div class="footer-social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter-square"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="properties.html"><i class="fas fa-chevron-right"></i> Properties</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>For Tenants</h4>
+                        <ul>
+                            <li><a href="properties.html?type=rent"><i class="fas fa-chevron-right"></i> Rent Property</a></li>
+                            <li><a href="properties.html"><i class="fas fa-chevron-right"></i> Browse Listings</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Moving Guide</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>For Landlords</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> List Property</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Pricing Guide</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Landlord Tips</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Nestify. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="privacy.html">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="auth-container">
+            <button class="modal-close" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="auth-tabs">
+                <button class="tab active" data-tab="signin">Sign In</button>
+                <button class="tab" data-tab="register">Register</button>
+            </div>
+            
+            <!-- Sign In Form -->
+            <div class="form-content active" id="signin">
+                <form id="signinForm">
+                    <div class="form-group">
+                        <label for="signin-email">Email</label>
+                        <input type="email" id="signin-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password">Password</label>
+                        <input type="password" id="signin-password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Sign In</button>
+                </form>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="form-content" id="register">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-phone">Phone</label>
+                        <input type="tel" id="register-phone" placeholder="Enter your phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" placeholder="Create a password" required>
+                    </div>
+                    <div class="role-selection">
+                        <label>I am a:</label>
+                        <div class="role-options">
+                            <label class="role-option active">
+                                <input type="radio" name="role" value="tenant" checked>
+                                <i class="fas fa-home"></i>
+                                <span>Tenant</span>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="role" value="landlord">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Landlord</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="landlord-upload" class="form-group hidden">
+                        <label for="id-upload">Upload ID / Business License</label>
+                        <div class="file-upload-box">
+                            <i class="fas fa-cloud-arrow-up"></i>
+                            <p>Click to upload or drag and drop</p>
+                            <input type="file" id="id-upload" name="id-upload" accept=".pdf,.jpg,.png">
+                        </div>
+                        <small>Required for verification.</small>
+                    </div>
+                    <div class="agree">
+                        <input type="checkbox" required>
+                        <p>By creating an account, you agree to Nestify's <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy.</a></p>
+                    </div>
+                    <button type="submit" class="btn-submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="javascripts/auth.js"></script>
+    <script src="javascripts/main.js"></script>
+</body>
+
+</html>

@@ -242,6 +242,7 @@ async function addProperty(e) {
                 ? document.getElementById('price-period').value 
                 : 'month',
             featured: shouldFeature,
+            status: 'active',
             createdAt: new Date().toISOString()
         };
         
@@ -390,31 +391,49 @@ function resetPropertyModal() {
 
 // Navigation between sections
 function showSection(sectionId) {
-    // Hide all sections
+    // Save to localStorage
+    localStorage.setItem('dashboard_active_section', sectionId);
+    
+    // Hide all sections with fade out
     document.querySelectorAll('.dashboard-section').forEach(section => {
         section.classList.remove('active');
+        section.style.opacity = '0';
     });
     document.querySelectorAll('.properties-section').forEach(section => {
         section.classList.remove('active');
+        section.style.opacity = '0';
     });
     
-    // Show/hide dashboard overview based on section
     const dashboardOverview = document.getElementById('dashboard-overview');
-    if (sectionId === 'dashboard') {
-        dashboardOverview.style.display = 'block';
-        // Also show properties section when on dashboard
-        document.getElementById('properties-section')?.classList.add('active');
-    } else {
-        dashboardOverview.style.display = 'none';
-    }
+    dashboardOverview.style.opacity = '0';
     
-    // Show selected section (except for dashboard which handled above)
-    if (sectionId !== 'dashboard') {
-        const section = document.getElementById(sectionId + '-section');
-        if (section) {
-            section.classList.add('active');
+    // Small delay for smooth transition
+    setTimeout(() => {
+        // Show/hide dashboard overview based on section
+        if (sectionId === 'dashboard') {
+            dashboardOverview.style.display = 'block';
+            document.getElementById('properties-section')?.classList.add('active');
+        } else {
+            dashboardOverview.style.display = 'none';
         }
-    }
+        
+        // Show selected section (except for dashboard which handled above)
+        if (sectionId !== 'dashboard') {
+            const section = document.getElementById(sectionId + '-section');
+            if (section) {
+                section.classList.add('active');
+            }
+        }
+        
+        // Fade in
+        dashboardOverview.style.transition = 'opacity 0.3s ease';
+        dashboardOverview.style.opacity = '1';
+        
+        document.querySelectorAll('.dashboard-section.active, .properties-section.active').forEach(section => {
+            section.style.transition = 'opacity 0.3s ease';
+            section.style.opacity = '1';
+        });
+    }, 50);
     
     // Update nav active state
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -434,15 +453,27 @@ function showSection(sectionId) {
     sidebarOverlay?.classList.remove('active');
 }
 
+// Track current booking filter
+let currentBookingFilter = 'all';
+
 // Render Bookings Section
-function renderBookings() {
+function renderBookings(filter = 'all') {
+    currentBookingFilter = filter;
     const session = JSON.parse(localStorage.getItem('nestify_session'));
     const bookings = JSON.parse(localStorage.getItem('nestify_bookings') || '[]');
     const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
     
     // Filter bookings for this landlord's properties
     const myPropertyIds = properties.filter(p => p.landlordId === session.userId).map(p => p.id);
-    const myBookings = bookings.filter(b => myPropertyIds.includes(b.propertyId));
+    let myBookings = bookings.filter(b => myPropertyIds.includes(b.propertyId));
+    
+    // Apply status filter
+    if (filter !== 'all') {
+        myBookings = myBookings.filter(b => b.status === filter);
+    }
+    
+    // Sort by date (newest first)
+    myBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     const container = document.getElementById('bookings-list');
     
@@ -450,8 +481,8 @@ function renderBookings() {
         container.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-calendar-alt"></i>
-                <h3>No Bookings Yet</h3>
-                <p>When tenants book your properties, they will appear here</p>
+                <h3>No Bookings Found</h3>
+                <p>${filter === 'all' ? 'When tenants schedule viewings, they will appear here' : 'No bookings with this status'}</p>
             </div>
         `;
         return;
@@ -459,19 +490,119 @@ function renderBookings() {
     
     container.innerHTML = myBookings.map(booking => {
         const property = properties.find(p => p.id === booking.propertyId);
+        
+        // Format date based on booking type
+        let formattedDate = '';
+        if (booking.type === 'rental' && booking.checkIn && booking.checkOut) {
+            formattedDate = `${new Date(booking.checkIn).toLocaleDateString()} - ${new Date(booking.checkOut).toLocaleDateString()}`;
+        } else if (booking.scheduledDate) {
+            formattedDate = new Date(booking.scheduledDate).toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        } else {
+            formattedDate = new Date(booking.createdAt).toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        const tenantName = booking.tenantName || booking.buyerName || 'Unknown';
+        const tenantEmail = booking.tenantEmail || booking.buyerEmail || 'N/A';
+        const tenantPhone = booking.tenantPhone || booking.buyerPhone || '';
+        
+        let actionButtons = '';
+        if (booking.status === 'pending') {
+            actionButtons = `
+                <div class="booking-actions">
+                    <button class="btn btn-confirm" onclick="confirmBooking(${booking.id})">
+                        <i class="fas fa-check"></i> Accept
+                    </button>
+                    <button class="btn btn-decline" onclick="declineBooking(${booking.id})">
+                        <i class="fas fa-times"></i> Decline
+                    </button>
+                </div>
+            `;
+        } else if (booking.status === 'confirmed' && booking.type === 'rental') {
+            actionButtons = `
+                <div class="booking-actions">
+                    <button class="btn btn-complete" onclick="completeBooking(${booking.id})">
+                        <i class="fas fa-check-double"></i> Mark Completed
+                    </button>
+                </div>
+            `;
+        }
+        
         return `
             <div class="booking-item">
                 <div class="booking-property">
                     <h4>${property ? property.title : 'Unknown Property'}</h4>
                     <p>${property ? property.location : ''}</p>
+                    <span class="booking-type-badge">${booking.type === 'rental' ? 'Rental Request' : (booking.type === 'purchase' ? 'Purchase Request' : 'Viewing Request')}</span>
+                    <div class="booking-tenant-info">
+                        <p><strong>From:</strong> ${tenantName}</p>
+                        <p><i class="fas fa-envelope"></i> ${tenantEmail}</p>
+                        ${tenantPhone ? `<p><i class="fas fa-phone"></i> ${tenantPhone}</p>` : ''}
+                        ${booking.guests ? `<p><i class="fas fa-users"></i> ${booking.guests} Guests</p>` : ''}
+                    </div>
+                    ${actionButtons}
                 </div>
-                <div class="booking-dates">
-                    ${new Date(booking.startDate).toLocaleDateString()} - ${new Date(booking.endDate).toLocaleDateString()}
+                <div class="booking-info">
+                    <div class="booking-date">
+                        <i class="fas fa-calendar"></i> ${formattedDate}
+                    </div>
+                    <span class="booking-status ${booking.status}">${booking.status}</span>
                 </div>
-                <span class="booking-status ${booking.status}">${booking.status}</span>
             </div>
         `;
     }).join('');
+    
+    // Update active filter tab
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.filter === filter) {
+            tab.classList.add('active');
+        }
+    });
+}
+
+// Filter bookings
+function filterBookings(filter) {
+    renderBookings(filter);
+}
+
+// Booking actions
+function confirmBooking(bookingId) {
+    updateBookingStatus(bookingId, 'confirmed');
+    alert('Booking accepted! The tenant has been notified and can now proceed to payment.');
+}
+
+function declineBooking(bookingId) {
+    if (confirm('Are you sure you want to decline this booking?')) {
+        updateBookingStatus(bookingId, 'declined');
+    }
+}
+
+function completeBooking(bookingId) {
+    updateBookingStatus(bookingId, 'completed');
+}
+
+function updateBookingStatus(bookingId, status) {
+    const bookings = JSON.parse(localStorage.getItem('nestify_bookings') || '[]');
+    const index = bookings.findIndex(b => b.id === bookingId);
+    
+    if (index !== -1) {
+        bookings[index].status = status;
+        bookings[index].updatedAt = new Date().toISOString();
+        localStorage.setItem('nestify_bookings', JSON.stringify(bookings));
+        
+        renderBookings(currentBookingFilter);
+        loadLandlordProperties(); // Update stats
+    }
 }
 
 // Render Messages Section
@@ -482,7 +613,10 @@ function renderMessages() {
     
     // Filter messages for this landlord's properties
     const myPropertyIds = properties.filter(p => p.landlordId === session.userId).map(p => p.id);
-    const myMessages = messages.filter(m => myPropertyIds.includes(m.propertyId));
+    let myMessages = messages.filter(m => myPropertyIds.includes(m.propertyId));
+    
+    // Sort by date (newest first)
+    myMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     const container = document.getElementById('messages-list');
     
@@ -491,24 +625,181 @@ function renderMessages() {
             <div class="empty-state">
                 <i class="fas fa-envelope"></i>
                 <h3>No Messages Yet</h3>
-                <p>When tenants or buyers contact you, messages will appear here</p>
+                <p>When tenants contact you, messages will appear here</p>
             </div>
         `;
         return;
     }
     
-    container.innerHTML = myMessages.map(message => `
-        <div class="message-item ${message.read ? '' : 'unread'}">
-            <div class="message-avatar">${message.fromName.charAt(0)}</div>
-            <div class="message-content">
-                <div class="message-header">
-                    <span class="message-name">${message.fromName}</span>
-                    <span class="message-date">${new Date(message.createdAt).toLocaleDateString()}</span>
+    container.innerHTML = myMessages.map(message => {
+        const property = properties.find(p => p.id === message.propertyId);
+        const formattedDate = new Date(message.createdAt).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        return `
+            <div class="message-item ${message.read ? '' : 'unread'}" onclick="viewMessage(${message.id})">
+                <div class="message-avatar">${message.fromName.charAt(0)}</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-name">${message.fromName}</span>
+                        <span class="message-date">${formattedDate}</span>
+                    </div>
+                    <p class="message-property">${property ? property.title : 'Unknown Property'}</p>
+                    <p class="message-preview">${message.message}</p>
                 </div>
-                <p class="message-preview">${message.message}</p>
+                ${message.read ? '' : '<div class="unread-dot"></div>'}
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
+}
+
+// Update notification badges
+function updateNotificationBadges() {
+    const session = JSON.parse(localStorage.getItem('nestify_session'));
+    if (!session) return;
+    
+    const messages = JSON.parse(localStorage.getItem('nestify_messages') || '[]');
+    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
+    const bookings = JSON.parse(localStorage.getItem('nestify_bookings') || '[]');
+    
+    // Count unread messages for this landlord
+    const myPropertyIds = properties.filter(p => p.landlordId === session.userId).map(p => p.id);
+    const unreadMessages = messages.filter(m => myPropertyIds.includes(m.propertyId) && !m.read).length;
+    
+    // Count pending bookings for this landlord
+    const pendingBookings = bookings.filter(b => myPropertyIds.includes(b.propertyId) && b.status === 'pending').length;
+    
+    // Update message badge
+    const messagesBadge = document.getElementById('messages-badge');
+    if (messagesBadge) {
+        if (unreadMessages > 0) {
+            messagesBadge.textContent = unreadMessages > 9 ? '9+' : unreadMessages;
+            messagesBadge.style.display = 'inline-flex';
+        } else {
+            messagesBadge.style.display = 'none';
+        }
+    }
+    
+    // Update bookings badge
+    const bookingsBadge = document.getElementById('bookings-badge');
+    if (bookingsBadge) {
+        if (pendingBookings > 0) {
+            bookingsBadge.textContent = pendingBookings > 9 ? '9+' : pendingBookings;
+            bookingsBadge.style.display = 'inline-flex';
+        } else {
+            bookingsBadge.style.display = 'none';
+        }
+    }
+}
+
+// View message detail
+let currentMessageId = null;
+
+function viewMessage(messageId) {
+    const messages = JSON.parse(localStorage.getItem('nestify_messages') || '[]');
+    const message = messages.find(m => m.id === messageId);
+    
+    if (!message) return;
+    
+    currentMessageId = messageId;
+    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
+    const property = properties.find(p => p.id === message.propertyId);
+    
+    document.getElementById('message-sender-avatar').textContent = message.fromName.charAt(0);
+    document.getElementById('message-sender-name').textContent = message.fromName;
+    document.getElementById('message-property-title').textContent = property ? property.title : 'Unknown Property';
+    document.getElementById('message-date').textContent = new Date(message.createdAt).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    document.getElementById('message-content').textContent = message.message;
+    document.getElementById('message-sender-email').textContent = message.fromEmail || 'Not provided';
+    document.getElementById('message-sender-phone').textContent = message.fromPhone || 'Not provided';
+    
+    // Show/hide mark as read button
+    const markReadBtn = document.getElementById('mark-read-btn');
+    if (message.read) {
+        markReadBtn.style.display = 'none';
+    } else {
+        markReadBtn.style.display = 'block';
+    }
+    
+    document.getElementById('messageDetailModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Mark as read automatically when viewing
+    if (!message.read) {
+        markMessageAsRead();
+    }
+}
+
+function closeMessageModal() {
+    document.getElementById('messageDetailModal').classList.remove('active');
+    document.body.style.overflow = '';
+    currentMessageId = null;
+}
+
+function markMessageAsRead() {
+    if (!currentMessageId) return;
+    
+    const messages = JSON.parse(localStorage.getItem('nestify_messages') || '[]');
+    const index = messages.findIndex(m => m.id === currentMessageId);
+    
+    if (index !== -1 && !messages[index].read) {
+        messages[index].read = true;
+        localStorage.setItem('nestify_messages', JSON.stringify(messages));
+        
+        document.getElementById('mark-read-btn').style.display = 'none';
+        renderMessages();
+        updateNotificationBadges();
+    }
+}
+
+function sendReply() {
+    if (!currentMessageId) return;
+    
+    const replyText = document.getElementById('reply-message').value.trim();
+    if (!replyText) {
+        alert('Please enter a reply message');
+        return;
+    }
+    
+    const session = JSON.parse(localStorage.getItem('nestify_session'));
+    const messages = JSON.parse(localStorage.getItem('nestify_messages') || '[]');
+    const messageIndex = messages.findIndex(m => m.id === currentMessageId);
+    
+    if (messageIndex === -1) return;
+    
+    const originalMessage = messages[messageIndex];
+    
+    // Create reply message
+    const replyMessage = {
+        id: Date.now(),
+        propertyId: originalMessage.propertyId,
+        landlordId: session.userId,
+        toUserId: originalMessage.fromUserId,
+        fromUserId: session.userId,
+        fromName: session.name,
+        fromEmail: session.email,
+        message: replyText,
+        type: 'reply',
+        replyTo: originalMessage.id,
+        read: false,
+        createdAt: new Date().toISOString()
+    };
+    
+    messages.push(replyMessage);
+    localStorage.setItem('nestify_messages', JSON.stringify(messages));
+    
+    alert('Reply sent successfully!');
+    document.getElementById('reply-message').value = '';
+    closeMessageModal();
+    renderMessages();
 }
 
 // Render Tenants Section
@@ -608,20 +899,28 @@ function renderFinance() {
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Dashboard initializing...');
+    
     const session = checkDashboardAuth();
+    console.log('Session:', session);
     if (!session) return;
     
     updateDashboardUI(session);
     loadLandlordProperties();
     
-    // Set dashboard as active by default
-    showSection('dashboard');
+    updateDashboardUI(session);
+    loadLandlordProperties();
+    
+    // Load saved section or default to dashboard
+    const savedSection = localStorage.getItem('dashboard_active_section') || 'dashboard';
+    showSection(savedSection);
     
     // Render other sections
     renderBookings();
     renderMessages();
     renderTenants();
     renderFinance();
+    updateNotificationBadges();
     
     // Nav link click handlers
     document.querySelectorAll('.nav-item').forEach(item => {

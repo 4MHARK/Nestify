@@ -63,6 +63,548 @@ html {
     scroll-padding-top: 80px;
 }
 
+/* ========================
+   ANIMATIONS
+======================== */
+
+/* Fade In */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Fade In Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade In Down */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade In Left */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Fade In Right */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Scale In */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Slide Up */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bounce */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Pulse */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Shimmer (for loading) */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Float */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Rotate */
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.6s ease forwards;
+}
+
+.animate-fade-in-left {
+    animation: fadeInLeft 0.6s ease forwards;
+}
+
+.animate-fade-in-right {
+    animation: fadeInRight 0.6s ease forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.4s ease forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease forwards;
+}
+
+.animate-bounce {
+    animation: bounce 1s ease infinite;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Staggered Animations - for lists and grids */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+.stagger-7 { animation-delay: 0.7s; }
+.stagger-8 { animation-delay: 0.8s; }
+
+/* Initially hidden for animations */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Button Animations */
+.btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Card Animations */
+.card, .property-card, .team-card, .stat-item, .contact-card, .booking-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover, .property-card:hover, .team-card:hover, .stat-item:hover, .contact-card:hover, .booking-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+}
+
+/* Link Animations */
+a {
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary);
+}
+
+/* Input Animations */
+input, textarea, select {
+    transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.15);
+}
+
+/* Image Animations */
+img {
+    transition: all 0.5s ease;
+}
+
+img:hover {
+    transform: scale(1.02);
+}
+
+/* Navbar Animation */
+.navbar {
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Animation */
+.modal-overlay {
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-card {
+    animation: scaleIn 0.3s ease;
+}
+
+/* Page Load Animation */
+.page-loader {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: linear-gradient(90deg, var(--light-50) 25%, #e2e8f0 50%, var(--light-50) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius);
+}
+
+/* Hero Section Animation */
+.hero-content > * {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+.hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* Property Cards Staggered */
+.property-grid .property-card {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.property-grid .property-card:nth-child(1) { animation-delay: 0.1s; }
+.property-grid .property-card:nth-child(2) { animation-delay: 0.2s; }
+.property-grid .property-card:nth-child(3) { animation-delay: 0.3s; }
+.property-grid .property-card:nth-child(4) { animation-delay: 0.4s; }
+.property-grid .property-card:nth-child(5) { animation-delay: 0.5s; }
+.property-grid .property-card:nth-child(6) { animation-delay: 0.6s; }
+.property-grid .property-card:nth-child(7) { animation-delay: 0.7s; }
+.property-grid .property-card:nth-child(8) { animation-delay: 0.8s; }
+
+/* Stats Animation */
+.stat-item {
+    opacity: 0;
+    animation: scaleIn 0.5s ease forwards;
+}
+
+.stat-item:nth-child(1) { animation-delay: 0.1s; }
+.stat-item:nth-child(2) { animation-delay: 0.2s; }
+.stat-item:nth-child(3) { animation-delay: 0.3s; }
+.stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+/* Team Cards Animation */
+.team-card {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.team-card:nth-child(1) { animation-delay: 0.1s; }
+.team-card:nth-child(2) { animation-delay: 0.2s; }
+.team-card:nth-child(3) { animation-delay: 0.3s; }
+.team-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Footer Animation */
+.footer {
+    animation: fadeIn 0.8s ease;
+}
+
+/* Dashboard Animations */
+.dashboard-section {
+    animation: fadeIn 0.4s ease;
+}
+
+/* Sidebar Animation */
+.dashboard-sidebar {
+    transition: transform 0.3s ease;
+}
+
+/* Heart/Favorite Animation */
+.property-favorite-btn {
+    transition: all 0.3s ease;
+}
+
+.property-favorite-btn:hover {
+    transform: scale(1.2);
+}
+
+.property-favorite-btn.active {
+    animation: pulse 0.3s ease;
+}
+
+/* Form Submit Animation */
+.btn-submit {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-submit::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.btn-submit:hover::after {
+    transform: translateX(0);
+}
+
+/* Scroll to Top Button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4);
+}
+
+/* Notification Badge Animation */
+.nav-badge {
+    animation: pulse 2s ease infinite;
+}
+
+/* Empty State Animation */
+.empty-state {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Filter Tabs Animation */
+.filter-tab {
+    transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+    transform: translateY(-2px);
+}
+
+.filter-tab.active {
+    animation: scaleIn 0.2s ease;
+}
+
+/* Checkbox/Radio Animation */
+input[type="checkbox"],
+input[type="radio"] {
+    transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    transform: scale(1.1);
+}
+
+/* Tab Animation */
+.tab {
+    transition: all 0.3s ease;
+}
+
+.tab:hover {
+    color: var(--primary);
+}
+
+/* User Dropdown Animation */
+.user-dropdown {
+    animation: fadeInDown 0.2s ease;
+}
+
+/* Booking Status Animation */
+.booking-status {
+    transition: all 0.3s ease;
+}
+
+.booking-status:hover {
+    transform: scale(1.05);
+}
+
+/* Back Button Animation */
+.back-btn {
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    transform: translateX(-5px);
+}
+
+/* Logo Animation */
+.logo:hover {
+    animation: float 1s ease;
+}
+
+/* Social Icons Animation */
+.footer-social a {
+    transition: all 0.3s ease;
+}
+
+.footer-social a:hover {
+    transform: translateY(-3px);
+    color: var(--primary);
+}
+
+/* Theme Toggle Animation */
+.theme-toggle {
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(15deg);
+}
+
+/* Search Input Animation */
+.search-box input {
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    transform: scale(1.02);
+}
+
+/* Mobile Menu Animation */
+.mobile-menu-btn {
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Counter Animation for Stats */
+.counter {
+    display: inline-block;
+}
+
+/* Page Hero Animation */
+.page-hero {
+    animation: fadeIn 0.6s ease;
+}
+
+.page-hero h1 {
+    animation: fadeInUp 0.8s ease;
+}
+
+.page-hero p {
+    animation: fadeInUp 0.8s ease 0.1s backwards;
+}
+
+/* Contact Form Animation */
+.contact-form-card {
+    animation: fadeInRight 0.6s ease;
+}
+
+.contact-info .contact-card {
+    opacity: 0;
+    animation: fadeInLeft 0.5s ease forwards;
+}
+
+.contact-info .contact-card:nth-child(1) { animation-delay: 0.1s; }
+.contact-info .contact-card:nth-child(2) { animation-delay: 0.2s; }
+.contact-info .contact-card:nth-child(3) { animation-delay: 0.3s; }
+.contact-info .contact-card:nth-child(4) { animation-delay: 0.4s; }
+
 body {
     font-family: var(--font-family);
     line-height: 1.6;
@@ -885,6 +1427,40 @@ textarea.form-control {
     position: relative;
 }
 
+/* Favorite Button */
+.property-favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--gray);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.property-favorite-btn:hover {
+    color: var(--danger);
+    transform: scale(1.1);
+}
+
+.property-favorite-btn.active {
+    color: var(--danger);
+}
+
+.property-favorite-btn.active i {
+    font-weight: 900;
+}
+
 [data-theme="dark"] .property-card {
     background: var(--light-50);
 }
@@ -1061,6 +1637,325 @@ textarea.form-control {
 
 .property-footer .btn {
     flex: 1;
+}
+
+/* ========================
+   PAGE HERO (About, Contact, etc.)
+======================== */
+.page-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 80px 0;
+    color: white;
+    text-align: center;
+}
+
+.page-hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.page-hero p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* ========================
+   ABOUT SECTION
+======================== */
+.about-section {
+    padding: 80px 0;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.about-content h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 20px;
+}
+
+.about-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin: 24px 0 12px;
+}
+
+.about-content p {
+    color: var(--gray-dark);
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.values-list {
+    list-style: none;
+    padding: 0;
+}
+
+.values-list li {
+    padding: 8px 0;
+    color: var(--gray-dark);
+}
+
+.values-list li i {
+    color: var(--success);
+    margin-right: 8px;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+}
+
+/* ========================
+   STATS SECTION
+======================== */
+.stats-section {
+    background: var(--light-50);
+    padding: 80px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 32px;
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+}
+
+.stat-item i {
+    font-size: 40px;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+
+.stat-item h3 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--secondary);
+    margin-bottom: 8px;
+}
+
+.stat-item p {
+    color: var(--gray);
+    font-size: 14px;
+}
+
+/* ========================
+   TEAM SECTION
+======================== */
+.team-section {
+    padding: 80px 0;
+}
+
+.team-section h2 {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--secondary);
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--gray);
+    margin-bottom: 48px;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+
+.team-card {
+    text-align: center;
+    padding: 32px;
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+}
+
+.team-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--light-50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.team-avatar i {
+    font-size: 32px;
+    color: var(--primary);
+}
+
+.team-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 4px;
+}
+
+.team-card p {
+    color: var(--gray);
+    font-size: 14px;
+}
+
+/* ========================
+   CONTACT SECTION
+======================== */
+.contact-section {
+    padding: 80px 0;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 48px;
+}
+
+.contact-form-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 40px;
+    box-shadow: var(--shadow);
+}
+
+.contact-form-card h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 24px;
+}
+
+.contact-form-card .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form-card .form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-bottom: 8px;
+}
+
+.contact-form-card .form-group input,
+.contact-form-card .form-group select,
+.contact-form-card .form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 15px;
+    transition: var(--transition);
+}
+
+.contact-form-card .form-group input:focus,
+.contact-form-card .form-group select:focus,
+.contact-form-card .form-group textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.contact-form-card textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.contact-form-card .btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.contact-form-card .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-primary);
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(29, 78, 216, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.contact-icon i {
+    font-size: 20px;
+    color: var(--primary);
+}
+
+.contact-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 8px;
+}
+
+.contact-card p {
+    color: var(--gray-dark);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.map-section {
+    padding-bottom: 80px;
+}
+
+.map-section .map-container {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow);
 }
 
 /* ========================

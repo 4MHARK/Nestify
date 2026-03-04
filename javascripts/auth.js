@@ -16,7 +16,7 @@ initStorage();
 // AUTHENTICATION SYSTEM
 // ========================
 
-// Modal Elements
+// Modal Elements - with null checks
 const authModal = document.getElementById('authModal');
 const closeModalBtn = document.getElementById('closeModal');
 const tabs = document.querySelectorAll('.tab');
@@ -26,6 +26,7 @@ const landlordUpload = document.getElementById('landlord-upload');
 
 // Open Modal Function
 function openAuthModal(tab = 'signin') {
+    if (!authModal) return;
     authModal.classList.add('active');
     document.body.style.overflow = 'hidden';
     switchTab(tab);
@@ -33,12 +34,110 @@ function openAuthModal(tab = 'signin') {
 
 // Close Modal Function
 function closeAuthModal() {
+    if (!authModal) return;
     authModal.classList.remove('active');
     document.body.style.overflow = '';
 }
 
 // Tab Switching
 function switchTab(tabName) {
+    if (!tabs || !formContents) return;
+    tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === tabName);
+    });
+    formContents.forEach(content => {
+        content.classList.toggle('active', content.id === tabName);
+    });
+}
+
+// Event Listeners - only if elements exist
+if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', closeAuthModal);
+}
+
+if (authModal) {
+    authModal.addEventListener('click', (e) => {
+        if (e.target === authModal) closeAuthModal();
+    });
+}
+
+if (tabs) {
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+    });
+}
+
+// Role Selection - Show/Hide Landlord Upload - only if elements exist
+if (roleOptions) {
+    roleOptions.forEach(option => {
+        option.addEventListener('change', (e) => {
+            const isLandlord = e.target.value === 'landlord';
+            document.querySelectorAll('.role-option').forEach(opt => {
+                opt.classList.toggle('active', opt.querySelector('input').checked);
+            });
+            if (landlordUpload) {
+                landlordUpload.classList.toggle('hidden', !isLandlord);
+            }
+            
+            // Update required attribute on file input
+            const idUpload = document.getElementById('id-upload');
+            if (idUpload) {
+                idUpload.required = isLandlord;
+            }
+        });
+    });
+}
+
+// File upload visual feedback - only if element exists
+const idUploadInput = document.getElementById('id-upload');
+if (idUploadInput) {
+    // Make clicking on the box trigger file input
+    const fileBox = idUploadInput.closest('.file-upload-box');
+    if (fileBox) {
+        fileBox.addEventListener('click', function(e) {
+            // Don't trigger click if already clicking on the input
+            if (e.target !== idUploadInput) {
+                idUploadInput.click();
+            }
+        });
+    }
+    
+    idUploadInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            // Keep the input but add visual feedback
+            fileBox.classList.add('file-selected');
+            // Create feedback elements without removing the input
+            const existingFeedback = fileBox.querySelector('.file-feedback');
+            if (!existingFeedback) {
+                const feedback = document.createElement('div');
+                feedback.className = 'file-feedback';
+                feedback.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <p>${this.files[0].name}</p>
+                    <small>Click to change file</small>
+                `;
+                fileBox.appendChild(feedback);
+            } else {
+                existingFeedback.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <p>${this.files[0].name}</p>
+                    <small>Click to change file</small>
+                `;
+            }
+        }
+    });
+}
+
+// Close Modal Function
+function closeAuthModal() {
+    if (!authModal) return;
+    authModal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Tab Switching
+function switchTab(tabName) {
+    if (!tabs || !formContents) return;
     tabs.forEach(tab => {
         tab.classList.toggle('active', tab.dataset.tab === tabName);
     });
@@ -58,22 +157,34 @@ if (authModal) {
     });
 }
 
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-});
+if (tabs) {
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+    });
+}
 
 // Role Selection - Show/Hide Landlord Upload
-roleOptions.forEach(option => {
-    option.addEventListener('change', (e) => {
-        const isLandlord = e.target.value === 'landlord';
-        document.querySelectorAll('.role-option').forEach(opt => {
-            opt.classList.toggle('active', opt.querySelector('input').checked);
+if (roleOptions) {
+    roleOptions.forEach(option => {
+        option.addEventListener('change', (e) => {
+            const isLandlord = e.target.value === 'landlord';
+            document.querySelectorAll('.role-option').forEach(opt => {
+                opt.classList.toggle('active', opt.querySelector('input').checked);
+            });
+            if (landlordUpload) {
+                landlordUpload.classList.toggle('hidden', !isLandlord);
+                // Force show the upload box
+                landlordUpload.style.display = isLandlord ? 'block' : 'none';
+            }
+            
+            // Update required attribute on file input
+            const idUpload = document.getElementById('id-upload');
+            if (idUpload) {
+                idUpload.required = isLandlord;
+            }
         });
-        if (landlordUpload) {
-            landlordUpload.classList.toggle('hidden', !isLandlord);
-        }
     });
-});
+}
 
 // Handle Sign In
 document.getElementById('signinForm')?.addEventListener('submit', function(e) {
@@ -96,9 +207,11 @@ document.getElementById('signinForm')?.addEventListener('submit', function(e) {
         updateUIForLoggedInUser(session);
         alert('Welcome back, ' + user.name + '!');
         
-        // Redirect landlords to dashboard
+        // Redirect based on role
         if (user.role === 'landlord') {
             window.location.href = 'pages/dashboard.html';
+        } else if (user.role === 'tenant') {
+            window.location.href = 'pages/tenant-dashboard.html';
         }
     } else {
         alert('Invalid email or password');
@@ -114,6 +227,17 @@ document.getElementById('registerForm')?.addEventListener('submit', function(e) 
     const phone = document.getElementById('register-phone').value;
     const password = document.getElementById('register-password').value;
     const role = document.querySelector('input[name="role"]:checked').value;
+    const idUpload = document.getElementById('id-upload');
+    
+    // Require ID upload for landlords
+    if (role === 'landlord') {
+        // Check multiple ways to ensure file is uploaded
+        const hasFile = idUpload && idUpload.files && idUpload.files.length > 0;
+        if (!hasFile) {
+            alert('Please upload your ID or Business License to register as a landlord.');
+            return;
+        }
+    }
     
     const users = JSON.parse(localStorage.getItem('nestify_users') || '[]');
     
@@ -130,6 +254,8 @@ document.getElementById('registerForm')?.addEventListener('submit', function(e) 
         phone,
         password,
         role,
+        idFile: idUpload && idUpload.files.length > 0 ? idUpload.files[0].name : null,
+        idVerified: false,
         createdAt: new Date().toISOString()
     };
     
@@ -149,9 +275,11 @@ document.getElementById('registerForm')?.addEventListener('submit', function(e) 
     updateUIForLoggedInUser(session);
     alert('Account created successfully!');
     
-    // Redirect landlords to dashboard
+    // Redirect based on role
     if (newUser.role === 'landlord') {
         window.location.href = 'pages/dashboard.html';
+    } else if (newUser.role === 'tenant') {
+        window.location.href = 'pages/tenant-dashboard.html';
     }
 });
 
@@ -168,6 +296,16 @@ function updateUIForLoggedInUser(session) {
         document.getElementById('user-name').textContent = session.name;
         document.getElementById('dropdown-name').textContent = session.name;
         document.getElementById('dropdown-email').textContent = session.email;
+        
+        // Update dashboard link based on role
+        const dashboardLinks = document.querySelectorAll('a[href*="dashboard.html"]');
+        dashboardLinks.forEach(link => {
+            if (session.role === 'tenant') {
+                link.href = 'pages/tenant-dashboard.html';
+            } else {
+                link.href = 'pages/dashboard.html';
+            }
+        });
     }
 }
 
@@ -184,10 +322,14 @@ const Auth = {
             userMenu.style.display = 'none';
         }
         
-        // Redirect based on current page location
-        if (window.location.href.includes('pages/dashboard.html')) {
+        // Determine redirect path based on current location
+        const currentPath = window.location.pathname;
+        
+        if (currentPath.includes('/pages/')) {
+            // We're in pages folder - go up one level to index.html
             window.location.href = '../index.html';
         } else {
+            // We're in root folder
             window.location.href = 'index.html';
         }
     }
@@ -248,4 +390,41 @@ document.querySelectorAll('.open-auth-modal').forEach(link => {
         const tab = this.getAttribute('data-tab') || 'signin';
         openAuthModal(tab);
     });
+});
+
+// Forgot Password Functions
+function showResetPassword() {
+    switchTab('forgotpassword');
+}
+
+function switchTab(tabName) {
+    if (!tabs || !formContents) return;
+    tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === tabName);
+    });
+    formContents.forEach(content => {
+        content.classList.toggle('active', content.id === tabName);
+    });
+}
+
+// Handle Forgot Password
+document.getElementById('forgotPasswordForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('reset-email').value;
+    const users = JSON.parse(localStorage.getItem('nestify_users') || '[]');
+    const user = users.find(u => u.email === email);
+    
+    if (!user) {
+        // Don't reveal if email exists
+        alert('If an account exists with this email, you will receive a password reset link.');
+        document.getElementById('forgotPasswordForm').reset();
+        return;
+    }
+    
+    // In a real app, this would send an email
+    // For demo, we'll just show success
+    alert('Password reset link sent! In a production app, an email would be sent to your address.');
+    document.getElementById('forgotPasswordForm').reset();
+    switchTab('signin');
 });
