@@ -268,6 +268,11 @@ function renderBookings(filter = 'all') {
             statusDisplay = 'Ready for Checkout';
         }
         
+        // Get tenant/buyer contact info
+        const contactName = booking.tenantName || booking.buyerName || 'N/A';
+        const contactEmail = booking.tenantEmail || booking.buyerEmail || 'N/A';
+        const contactPhone = booking.tenantPhone || booking.buyerPhone || 'N/A';
+        
         return `
             <div class="booking-item">
                 <div class="booking-info">
@@ -275,6 +280,11 @@ function renderBookings(filter = 'all') {
                         <h4>${property ? property.title : 'Unknown Property'}</h4>
                         <p>${property ? property.location : ''}</p>
                         <span class="booking-type">${bookingTypeLabel}</span>
+                    </div>
+                    <div class="booking-contact-info">
+                        <p><i class="fas fa-user"></i> <strong>Name:</strong> ${contactName}</p>
+                        <p><i class="fas fa-envelope"></i> <strong>Email:</strong> ${contactEmail}</p>
+                        <p><i class="fas fa-phone"></i> <strong>Phone:</strong> ${contactPhone}</p>
                     </div>
                 </div>
                 <div class="booking-details">

@@ -440,6 +440,7 @@ document.getElementById('rentalBookingForm').addEventListener('submit', function
         tenantId: currentUser.userId,
         tenantName: currentUser.name,
         tenantEmail: currentUser.email,
+        tenantPhone: document.getElementById('rental-phone').value,
         checkIn: document.getElementById('check-in-date').value,
         checkOut: document.getElementById('check-out-date').value,
         guests: document.getElementById('guests-count').value,

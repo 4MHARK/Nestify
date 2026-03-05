@@ -729,13 +729,14 @@ img {
 }
 
 .btn-ghost {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    backdrop-filter: blur(10px);
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
 }
 
 .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--primary);
+    color: white;
 }
 
 .btn-sm {
@@ -1070,18 +1071,6 @@ img {
     position: relative;
     z-index: 1;
     max-width: 700px;
-    animation: fadeInUp 0.8s ease;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .hero-badge {
@@ -1095,7 +1084,6 @@ img {
     font-size: 13px;
     font-weight: 500;
     margin-bottom: 24px;
-    animation: fadeInUp 0.8s ease 0.1s backwards;
 }
 
 .hero-badge i {
@@ -1108,7 +1096,6 @@ img {
     line-height: 1.15;
     margin-bottom: 20px;
     letter-spacing: -1px;
-    animation: fadeInUp 0.8s ease 0.2s backwards;
 }
 
 .hero h1 span {
@@ -1123,7 +1110,6 @@ img {
     margin-bottom: 36px;
     opacity: 0.9;
     line-height: 1.7;
-    animation: fadeInUp 0.8s ease 0.3s backwards;
 }
 
 .hero-search {
@@ -1131,7 +1117,6 @@ img {
     padding: 24px;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-xl);
-    animation: fadeInUp 0.8s ease 0.4s backwards;
 }
 
 .hero-search form {
@@ -1172,7 +1157,6 @@ img {
     display: flex;
     gap: 48px;
     margin-top: 48px;
-    animation: fadeInUp 0.8s ease 0.5s backwards;
 }
 
 .hero-stat {
@@ -1205,6 +1189,152 @@ img {
 
 [data-theme="dark"] .search-section {
     background: transparent;
+}
+
+/* Button Dark Mode */
+[data-theme="dark"] .btn-ghost {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+[data-theme="dark"] .btn-secondary {
+    background: var(--primary);
+    color: white;
+    border: none;
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+    background: var(--primary-dark);
+    color: white;
+}
+
+[data-theme="dark"] .cta-section {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+}
+
+[data-theme="dark"] .cta-section h2 {
+    color: white;
+}
+
+[data-theme="dark"] .cta-section p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .theme-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* About Page Dark Mode */
+[data-theme="dark"] .about-section {
+    background: var(--dark);
+}
+
+[data-theme="dark"] .about-content h2,
+[data-theme="dark"] .about-content h3 {
+    color: white;
+}
+
+[data-theme="dark"] .about-content p {
+    color: var(--gray-light);
+}
+
+[data-theme="dark"] .values-list li {
+    color: var(--gray-light);
+}
+
+[data-theme="dark"] .stats-section {
+    background: var(--dark-50);
+}
+
+[data-theme="dark"] .stat-item {
+    background: var(--dark);
+}
+
+[data-theme="dark"] .stat-item h3 {
+    color: white;
+}
+
+[data-theme="dark"] .stat-item p {
+    color: var(--gray-light);
+}
+
+[data-theme="dark"] .team-section {
+    background: var(--dark);
+}
+
+[data-theme="dark"] .team-section h2 {
+    color: white;
+}
+
+[data-theme="dark"] .section-subtitle {
+    color: var(--gray-light);
+}
+
+[data-theme="dark"] .team-card {
+    background: var(--dark-50);
+}
+
+[data-theme="dark"] .team-card h4 {
+    color: white;
+}
+
+[data-theme="dark"] .team-card p {
+    color: var(--gray-light);
+}
+
+/* Contact Page Dark Mode */
+[data-theme="dark"] .contact-section {
+    background: var(--dark);
+}
+
+[data-theme="dark"] .contact-form-card {
+    background: var(--dark-50);
+}
+
+[data-theme="dark"] .contact-form-card h2 {
+    color: white;
+}
+
+[data-theme="dark"] .contact-card {
+    background: var(--dark-50);
+}
+
+[data-theme="dark"] .contact-card h4 {
+    color: white;
+}
+
+[data-theme="dark"] .contact-card p {
+    color: var(--gray-light);
+}
+
+[data-theme="dark"] .map-container iframe {
+    filter: grayscale(100%) invert(90%) contrast(80%);
+}
+
+/* Page Hero Dark Mode */
+[data-theme="dark"] .page-hero {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+}
+
+[data-theme="dark"] .page-hero h1 {
+    color: white;
+}
+
+[data-theme="dark"] .page-hero p {
+    color: var(--gray-light);
 }
 
 .search-filters-bar {
@@ -1512,6 +1642,11 @@ textarea.form-control {
 
 .badge-rent {
     background: linear-gradient(135deg, var(--info) 0%, #2563eb 100%);
+    color: white;
+}
+
+/* Ensure badges are visible in dark mode */
+[data-theme="dark"] .property-badge {
     color: white;
 }
 
@@ -2066,8 +2201,12 @@ textarea.form-control {
 }
 
 .footer-social a:hover {
-    background: var(--primary);
+    background: #1877f2;
     transform: translateY(-3px);
+}
+
+.footer-social a:hover i {
+    color: white;
 }
 
 .footer-links h4 {

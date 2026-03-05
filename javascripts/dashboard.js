@@ -49,10 +49,12 @@ function loadLandlordProperties() {
     const totalValue = myProperties.reduce((sum, p) => sum + p.price, 0);
     document.getElementById('total-revenue').textContent = '$' + totalValue.toLocaleString();
     
-    // Get tenants count
-    const tenants = JSON.parse(localStorage.getItem('nestify_tenants') || '[]');
-    const activeTenants = tenants.filter(t => myPropertyIds.includes(t.propertyId)).length;
-    document.getElementById('total-tenants').textContent = activeTenants;
+    // Get tenants count from COMPLETED bookings (reuse existing bookings variable)
+    const completedTenants = bookings.filter(b => 
+        myPropertyIds.includes(b.propertyId) && 
+        (b.status === 'completed' || b.status === 'confirmed')
+    ).length;
+    document.getElementById('total-tenants').textContent = completedTenants;
     
     // Render properties
     const container = document.getElementById('my-properties');
@@ -446,6 +448,11 @@ function showSection(sectionId) {
         navLink.classList.add('active');
     }
     
+    // Re-render tenants section when navigating to it (fresh data)
+    if (sectionId === 'tenants') {
+        setTimeout(() => renderTenants(), 100);
+    }
+    
     // Close mobile sidebar if open
     const sidebar = document.querySelector('.dashboard-sidebar');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
@@ -672,6 +679,9 @@ function updateNotificationBadges() {
     // Count pending bookings for this landlord
     const pendingBookings = bookings.filter(b => myPropertyIds.includes(b.propertyId) && b.status === 'pending').length;
     
+    // Count active tenants (confirmed/completed bookings)
+    const activeTenants = bookings.filter(b => myPropertyIds.includes(b.propertyId) && (b.status === 'confirmed' || b.status === 'completed')).length;
+    
     // Update message badge
     const messagesBadge = document.getElementById('messages-badge');
     if (messagesBadge) {
@@ -693,6 +703,241 @@ function updateNotificationBadges() {
             bookingsBadge.style.display = 'none';
         }
     }
+    
+    // Update tenants badge
+    const tenantsBadge = document.getElementById('tenants-badge');
+    if (tenantsBadge) {
+        if (activeTenants > 0) {
+            tenantsBadge.textContent = activeTenants > 9 ? '9+' : activeTenants;
+            tenantsBadge.style.display = 'inline-flex';
+        } else {
+            tenantsBadge.style.display = 'none';
+        }
+    }
+}
+
+// Render Tenants Section - Show tenants who have paid for properties
+function renderTenants() {
+    const session = JSON.parse(localStorage.getItem('nestify_session'));
+    if (!session) return;
+    
+    const bookings = JSON.parse(localStorage.getItem('nestify_bookings') || '[]');
+    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
+    
+    // Get this landlord's property IDs
+    const myPropertyIds = properties.filter(p => p.landlordId === session.userId).map(p => p.id);
+    
+    // Debug: Log what's being checked
+    console.log('=== TENANT DEBUG ===');
+    console.log('Current User ID:', session.userId);
+    console.log('My Property IDs:', myPropertyIds);
+    console.log('All Bookings:', bookings);
+    console.log('All Properties:', properties);
+    
+    // Filter: bookings for this landlord's properties that are COMPLETED or CONFIRMED
+    const myTenants = bookings.filter(b => 
+        myPropertyIds.includes(b.propertyId) && 
+        (b.status === 'completed' || b.status === 'confirmed')
+    );
+    
+    console.log('Found Tenants:', myTenants);
+    
+    const container = document.getElementById('tenants-list');
+    
+    // Debug: Show helpful message based on data
+    let emptyMessage = '';
+    if (myPropertyIds.length === 0) {
+        emptyMessage = '<p><strong>You have no properties!</strong><br>Add a property first, then tenants can book it.</p><a href="#properties" class="btn btn-primary" onclick="showSection(\'properties\')"><i class="fas fa-plus"></i> Add Property</a>';
+    } else if (bookings.length === 0) {
+        emptyMessage = '<p><strong>No bookings yet!</strong><br>When tenants book your properties, they will appear here.</p><a href="../properties.html" class="btn btn-primary" target="_blank"><i class="fas fa-search"></i> View Properties</a>';
+    } else {
+        emptyMessage = '<p><strong>Waiting for payment completion!</strong><br>Tenants need to complete payment for their bookings to appear here.<br>Check the <a href="#bookings" onclick="showSection(\'bookings\')">Bookings section</a> to accept pending requests.</p>';
+    }
+    
+    if (myTenants.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-users"></i>
+                <h3>No Tenants Yet</h3>
+                ${emptyMessage}
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = myTenants.map(tenant => {
+        const property = properties.find(p => p.id === tenant.propertyId);
+        
+        // Get tenant info
+        const tenantName = tenant.tenantName || tenant.buyerName || 'Unknown';
+        const tenantEmail = tenant.tenantEmail || tenant.buyerEmail || 'N/A';
+        const tenantPhone = tenant.tenantPhone || tenant.buyerPhone || 'N/A';
+        
+        // Format date
+        const transactionDate = tenant.paidAt 
+            ? new Date(tenant.paidAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+            : (tenant.checkIn 
+                ? new Date(tenant.checkIn).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                : new Date(tenant.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
+        
+        const bookingType = tenant.type === 'rental' ? 'Rental' : 'Purchase';
+        
+        return `
+            <div class="tenant-card">
+                <div class="tenant-header">
+                    <div class="tenant-avatar">${tenantName.charAt(0).toUpperCase()}</div>
+                    <div class="tenant-info">
+                        <h4>${tenantName}</h4>
+                        <span class="tenant-type">${bookingType}</span>
+                    </div>
+                </div>
+                <div class="tenant-details">
+                    <div class="tenant-detail">
+                        <i class="fas fa-home"></i>
+                        <div>
+                            <strong>Property</strong>
+                            <p>${property ? property.title : 'Unknown Property'}</p>
+                        </div>
+                    </div>
+                    <div class="tenant-detail">
+                        <i class="fas fa-calendar"></i>
+                        <div>
+                            <strong>Move-in Date</strong>
+                            <p>${transactionDate}</p>
+                        </div>
+                    </div>
+                    <div class="tenant-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong>
+                            <p>${tenantEmail}</p>
+                        </div>
+                    </div>
+                    <div class="tenant-detail">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Phone</strong>
+                            <p>${tenantPhone}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Render Finance Section
+function renderFinance() {
+    const session = JSON.parse(localStorage.getItem('nestify_session'));
+    if (!session) return;
+    
+    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
+    const bookings = JSON.parse(localStorage.getItem('nestify_bookings') || '[]');
+    
+    // Get this landlord's properties
+    const myProperties = properties.filter(p => p.landlordId === session.userId);
+    const myPropertyIds = myProperties.map(p => p.id);
+    
+    // Calculate stats
+    const totalProperties = myProperties.length;
+    const totalValue = myProperties.reduce((sum, p) => sum + p.price, 0);
+    const completedBookings = bookings.filter(b => myPropertyIds.includes(b.propertyId) && b.status === 'completed');
+    const totalRevenue = completedBookings.reduce((sum, b) => {
+        const property = properties.find(p => p.id === b.propertyId);
+        return sum + (property ? property.price : 0);
+    }, 0);
+    
+    const container = document.getElementById('finance-stats');
+    
+    container.innerHTML = `
+        <div class="finance-card">
+            <div class="finance-icon" style="background: rgba(13, 148, 136, 0.1); color: var(--primary);">
+                <i class="fas fa-building"></i>
+            </div>
+            <div class="finance-content">
+                <span class="finance-number">${totalProperties}</span>
+                <span class="finance-label">Total Properties</span>
+            </div>
+        </div>
+        <div class="finance-card">
+            <div class="finance-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="finance-content">
+                <span class="finance-number">$${totalValue.toLocaleString()}</span>
+                <span class="finance-label">Portfolio Value</span>
+            </div>
+        </div>
+        <div class="finance-card">
+            <div class="finance-icon" style="background: rgba(34, 197, 94, 0.1); color: var(--success);">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="finance-content">
+                <span class="finance-number">${completedBookings.length}</span>
+                <span class="finance-label">Completed Transactions</span>
+            </div>
+        </div>
+        <div class="finance-card">
+            <div class="finance-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="finance-content">
+                <span class="finance-number">$${totalRevenue.toLocaleString()}</span>
+                <span class="finance-label">Total Revenue</span>
+            </div>
+        </div>
+    `;
+}
+
+// Render Messages Section
+function renderMessages() {
+    const session = JSON.parse(localStorage.getItem('nestify_session'));
+    const messages = JSON.parse(localStorage.getItem('nestify_messages') || '[]');
+    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
+    
+    // Filter messages for this landlord's properties
+    const myPropertyIds = properties.filter(p => p.landlordId === session.userId).map(p => p.id);
+    let myMessages = messages.filter(m => myPropertyIds.includes(m.propertyId));
+    
+    // Sort by date (newest first)
+    myMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    const container = document.getElementById('messages-list');
+    
+    if (myMessages.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-envelope"></i>
+                <h3>No Messages Yet</h3>
+                <p>When tenants contact you, messages will appear here</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = myMessages.map(message => {
+        const property = properties.find(p => p.id === message.propertyId);
+        const formattedDate = new Date(message.createdAt).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        return `
+            <div class="message-item ${message.read ? '' : 'unread'}" onclick="viewMessage(${message.id})">
+                <div class="message-avatar">${message.fromName.charAt(0)}</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-name">${message.fromName}</span>
+                        <span class="message-date">${formattedDate}</span>
+                    </div>
+                    <p class="message-property">${property ? property.title : 'Unknown Property'}</p>
+                    <p class="message-preview">${message.message}</p>
+                </div>
+                ${message.read ? '' : '<div class="unread-dot"></div>'}
+            </div>
+        `;
+    }).join('');
 }
 
 // View message detail
@@ -800,48 +1045,6 @@ function sendReply() {
     document.getElementById('reply-message').value = '';
     closeMessageModal();
     renderMessages();
-}
-
-// Render Tenants Section
-function renderTenants() {
-    const session = JSON.parse(localStorage.getItem('nestify_session'));
-    const tenants = JSON.parse(localStorage.getItem('nestify_tenants') || '[]');
-    const properties = JSON.parse(localStorage.getItem('nestify_properties') || '[]');
-    
-    // Filter tenants for this landlord's properties
-    const myPropertyIds = properties.filter(p => p.landlordId === session.userId).map(p => p.id);
-    const myTenants = tenants.filter(t => myPropertyIds.includes(t.propertyId));
-    
-    const container = document.getElementById('tenants-list');
-    
-    if (myTenants.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-users"></i>
-                <h3>No Tenants Yet</h3>
-                <p>Your tenants will appear here once they rent your properties</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = myTenants.map(tenant => {
-        const property = properties.find(p => p.id === tenant.propertyId);
-        return `
-            <div class="tenant-item">
-                <div class="tenant-avatar">${tenant.tenantName.charAt(0)}</div>
-                <div class="tenant-info">
-                    <h4>${tenant.tenantName}</h4>
-                    <p>${property ? property.title : 'Unknown Property'}</p>
-                </div>
-                <div class="tenant-lease">
-                    <div class="lease-dates">
-                        ${new Date(tenant.leaseStart).toLocaleDateString()} - ${new Date(tenant.leaseEnd).toLocaleDateString()}
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
 }
 
 // Render Finance Section
