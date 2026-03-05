@@ -204,7 +204,23 @@ To improve Nestify:
 
 ---
 
-##  Legal
+## Future Enhancements
+
+Potential features to add in future versions:
+- Backend API integration for real data
+- Payment processing (Stripe, PayPal)
+- Email notifications
+- Advanced analytics dashboard
+- Virtual property tours
+- Real-time messaging between users
+- Review and rating system
+- Map-based property search
+- Landlord verification system
+- Multi-language support
+
+---
+
+## Legal
 
 - **Privacy Policy** - See [privacy.html](privacy.html)
 - **Terms of Service** - See [terms.html](terms.html)
@@ -218,8 +234,14 @@ Founded in 2026, Nestify is a modern real estate platform dedicated to simplifyi
 
 ---
 
-##  Support
+## Support
 
 Have questions or need help? Visit our [Contact Page](contact.html) or check out our [About Page](about.html) to learn more about us.
 
-**Happy house hunting! **
+---
+
+**Project Status:** Complete MVP
+**Last Updated:** March 2026
+**Version:** 1.0.0
+
+Happy house hunting! 🏠

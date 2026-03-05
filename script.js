@@ -2,6 +2,35 @@
 // MAIN APPLICATION
 // ========================
 
+// ========================
+// THEME TOGGLE
+// ========================
+function initTheme() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+
+    const savedTheme = localStorage.getItem('nestify_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('nestify_theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+}
+
+function updateThemeIcon(theme) {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+    const icon = themeToggle.querySelector('i');
+    if (icon) {
+        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
+
 // Quick Filter Function
 function quickFilter(value) {
     const url = new URL(window.location.href);
@@ -145,6 +174,7 @@ function animateCounters() {
 
 // Initialize all on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
     initScrollToTop();
     initScrollAnimations();
     initNavbarScroll();
