@@ -34,7 +34,7 @@ function updateThemeIcon(theme) {
 // ========================
 // TOAST NOTIFICATIONS
 // ========================
-function showToast(message, type = 'success', duration = 3500) {
+function showToast(message, type = 'success', duration = 5000) {
     let container = document.querySelector('.toast-container');
     if (!container) {
         container = document.createElement('div');
