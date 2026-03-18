@@ -369,7 +369,7 @@ function sendQuickMessage() {
     const messageText = document.getElementById('landlord-quick-message').value.trim();
     
     if (!messageText) {
-        alert('Please enter a message');
+        showToast('Please enter a message', 'warning');
         return;
     }
     
@@ -395,7 +395,7 @@ function sendQuickMessage() {
     messages.push(message);
     localStorage.setItem('nestify_messages', JSON.stringify(messages));
     
-    alert('Message sent!');
+    showToast('Message sent!', 'success');
     document.getElementById('landlord-quick-message').value = '';
 }
 
@@ -419,7 +419,7 @@ document.getElementById('messageForm').addEventListener('submit', function(e) {
     messages.push(message);
     localStorage.setItem('nestify_messages', JSON.stringify(messages));
     
-    alert('Message sent successfully!');
+    showToast('Message sent successfully!', 'success');
     closeMessageModal();
     document.getElementById('messageForm').reset();
 });
@@ -454,7 +454,7 @@ document.getElementById('rentalBookingForm').addEventListener('submit', function
     bookings.push(booking);
     localStorage.setItem('nestify_bookings', JSON.stringify(bookings));
     
-    alert('Booking request sent successfully! The landlord will review and confirm.');
+    showToast('Booking request sent! The landlord will review and confirm.', 'success');
     document.getElementById('rentalBookingForm').reset();
 });
 
@@ -485,7 +485,7 @@ document.getElementById('purchaseBookingForm').addEventListener('submit', functi
     bookings.push(booking);
     localStorage.setItem('nestify_bookings', JSON.stringify(bookings));
     
-    alert('Purchase request sent successfully! The landlord will contact you.');
+    showToast('Purchase request sent! The landlord will contact you.', 'success');
     document.getElementById('purchaseBookingForm').reset();
 });
 
@@ -594,7 +594,7 @@ function togglePropertyStatus() {
         properties[index].status = properties[index].status === 'inactive' ? 'active' : 'inactive';
         localStorage.setItem('nestify_properties', JSON.stringify(properties));
         
-        alert(`Property marked as ${properties[index].status}`);
+        showToast(`Property marked as ${properties[index].status}`, 'success');
         location.reload();
     }
 }
@@ -610,7 +610,7 @@ function deleteThisProperty() {
     const filtered = properties.filter(p => p.id !== currentProperty.id);
     localStorage.setItem('nestify_properties', JSON.stringify(filtered));
     
-    alert('Property deleted successfully!');
+    showToast('Property deleted successfully!', 'success');
     window.location.href = 'dashboard.html';
 }
 
@@ -651,7 +651,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     messages.push(message);
     localStorage.setItem('nestify_messages', JSON.stringify(messages));
     
-    alert('Message sent successfully! The landlord will contact you soon.');
+    showToast('Message sent! The landlord will contact you soon.', 'success');
     closeContactModal();
     document.getElementById('contactForm').reset();
 });
@@ -699,7 +699,7 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
     bookings.push(booking);
     localStorage.setItem('nestify_bookings', JSON.stringify(bookings));
     
-    alert('Viewing request sent successfully! The landlord will confirm soon.');
+    showToast('Viewing request sent! The landlord will confirm soon.', 'success');
     closeBookingModal();
     document.getElementById('bookingForm').reset();
 });

@@ -205,7 +205,7 @@ document.getElementById('signinForm')?.addEventListener('submit', function(e) {
         localStorage.setItem('nestify_session', JSON.stringify(session));
         closeAuthModal();
         updateUIForLoggedInUser(session);
-        alert('Welcome back, ' + user.name + '!');
+        showToast('Welcome back, ' + user.name + '!', 'success');
         
         // Redirect based on role
         if (user.role === 'landlord') {
@@ -214,7 +214,7 @@ document.getElementById('signinForm')?.addEventListener('submit', function(e) {
             window.location.href = 'pages/tenant-dashboard.html';
         }
     } else {
-        alert('Invalid email or password');
+        showToast('Invalid email or password', 'error');
     }
 });
 
@@ -234,7 +234,7 @@ document.getElementById('registerForm')?.addEventListener('submit', function(e) 
         // Check multiple ways to ensure file is uploaded
         const hasFile = idUpload && idUpload.files && idUpload.files.length > 0;
         if (!hasFile) {
-            alert('Please upload your ID or Business License to register as a landlord.');
+            showToast('Please upload your ID or Business License to register as a landlord.', 'warning');
             return;
         }
     }
@@ -243,7 +243,7 @@ document.getElementById('registerForm')?.addEventListener('submit', function(e) 
     
     // Check if email exists
     if (users.find(u => u.email === email)) {
-        alert('Email already registered');
+        showToast('Email already registered', 'error');
         return;
     }
     
@@ -273,7 +273,7 @@ document.getElementById('registerForm')?.addEventListener('submit', function(e) 
     
     closeAuthModal();
     updateUIForLoggedInUser(session);
-    alert('Account created successfully!');
+    showToast('Account created successfully!', 'success');
     
     // Redirect based on role
     if (newUser.role === 'landlord') {
@@ -417,14 +417,14 @@ document.getElementById('forgotPasswordForm')?.addEventListener('submit', functi
     
     if (!user) {
         // Don't reveal if email exists
-        alert('If an account exists with this email, you will receive a password reset link.');
+        showToast('If an account exists with this email, you will receive a password reset link.', 'info');
         document.getElementById('forgotPasswordForm').reset();
         return;
     }
     
     // In a real app, this would send an email
     // For demo, we'll just show success
-    alert('Password reset link sent! In a production app, an email would be sent to your address.');
+    showToast('Password reset link sent!', 'success');
     document.getElementById('forgotPasswordForm').reset();
     switchTab('signin');
 });

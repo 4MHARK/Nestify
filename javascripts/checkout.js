@@ -22,7 +22,7 @@ function initCheckout() {
     
     // Check if tenant
     if (session.role !== 'tenant') {
-        alert('Access denied. Tenant account required.');
+        showToast('Access denied. Tenant account required.', 'error');
         window.location.href = '../index.html';
         return;
     }
@@ -32,7 +32,7 @@ function initCheckout() {
     // Get booking ID from sessionStorage
     const bookingId = parseInt(sessionStorage.getItem('checkout_booking_id'));
     if (!bookingId) {
-        alert('No booking found');
+        showToast('No booking found', 'error');
         window.location.href = 'tenant-dashboard.html';
         return;
     }
@@ -62,21 +62,21 @@ function loadBooking(bookingId) {
     currentBooking = bookings.find(b => b.id === bookingId);
     
     if (!currentBooking) {
-        alert('Booking not found');
+        showToast('Booking not found', 'error');
         window.location.href = 'tenant-dashboard.html';
         return;
     }
     
     // Verify booking belongs to current user
     if (currentBooking.tenantId !== currentUser.userId && currentBooking.buyerId !== currentUser.userId) {
-        alert('Access denied');
+        showToast('Access denied', 'error');
         window.location.href = 'tenant-dashboard.html';
         return;
     }
     
     // Check if already paid
     if (currentBooking.status === 'completed' || currentBooking.paidAt) {
-        alert('This booking has already been paid');
+        showToast('This booking has already been paid', 'warning');
         window.location.href = 'tenant-dashboard.html';
         return;
     }
@@ -84,7 +84,7 @@ function loadBooking(bookingId) {
     currentProperty = properties.find(p => p.id === currentBooking.propertyId);
     
     if (!currentProperty) {
-        alert('Property not found');
+        showToast('Property not found', 'error');
         return;
     }
     
@@ -222,28 +222,28 @@ document.getElementById('paymentForm').addEventListener('submit', function(e) {
     // Validate card name
     if (!cardName) {
         document.getElementById('card-name').classList.add('error');
-        alert('Please enter cardholder name');
+        showToast('Please enter cardholder name', 'warning');
         return;
     }
     
     // Validate card number with Luhn
     if (!luhnCheck(cardNumber)) {
         document.getElementById('card-number').classList.add('error');
-        alert('Invalid card number. Please check and try again.');
+        showToast('Invalid card number. Please check and try again.', 'error');
         return;
     }
     
     // Validate expiry
     if (!validateExpiry(cardExpiry)) {
         document.getElementById('card-expiry').classList.add('error');
-        alert('Invalid or expired card. Please check the expiry date.');
+        showToast('Invalid or expired card. Please check the expiry date.', 'error');
         return;
     }
     
     // Validate CVV
     if (!cardCvv || cardCvv.length < 3) {
         document.getElementById('card-cvv').classList.add('error');
-        alert('Please enter a valid CVV');
+        showToast('Please enter a valid CVV', 'warning');
         return;
     }
     

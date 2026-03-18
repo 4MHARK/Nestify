@@ -31,6 +31,45 @@ function updateThemeIcon(theme) {
     }
 }
 
+// ========================
+// TOAST NOTIFICATIONS
+// ========================
+function showToast(message, type = 'success', duration = 3500) {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-times-circle',
+        info: 'fa-info-circle',
+        warning: 'fa-exclamation-triangle'
+    };
+    
+    toast.innerHTML = `
+        <div class="toast-icon">
+            <i class="fas ${icons[type]}"></i>
+        </div>
+        <span style="flex: 1;">${message}</span>
+        <button class="toast-close" onclick="this.closest('.toast').remove()" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:16px;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideInRight 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
 // Quick Filter Function
 function quickFilter(value) {
     const url = new URL(window.location.href);

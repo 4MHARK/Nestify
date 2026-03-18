@@ -12,7 +12,7 @@ function checkDashboardAuth() {
     }
     
     if (session.role !== 'landlord') {
-        alert('Access denied. Landlord account required.');
+        showToast('Access denied. Landlord account required.', 'error');
         window.location.href = '../index.html';
         return null;
     }
@@ -179,23 +179,23 @@ async function addProperty(e) {
         
         // Validate total images
         if (finalImages.length < 2) {
-            alert('Please have at least 2 images total');
+            showToast('Please have at least 2 images total', 'warning');
             return;
         }
         
         if (finalImages.length > 5) {
-            alert('Maximum 5 images allowed');
+            showToast('Maximum 5 images allowed', 'warning');
             return;
         }
     } else {
         // When adding new: require 2-5 images
         if (imageFiles.length < 2) {
-            alert('Please upload at least 2 images');
+            showToast('Please upload at least 2 images', 'warning');
             return;
         }
         
         if (imageFiles.length > 5) {
-            alert('Maximum 5 images allowed');
+            showToast('Maximum 5 images allowed', 'warning');
             return;
         }
         
@@ -262,9 +262,9 @@ async function addProperty(e) {
     renderFinance();
     
     if (isEditing) {
-        alert('Property updated successfully!');
+        showToast('Property updated successfully!', 'success');
     } else {
-        alert('Property added successfully!');
+        showToast('Property added successfully!', 'success');
     }
 }
 
@@ -278,7 +278,7 @@ function deleteProperty(id) {
     
     loadLandlordProperties();
     renderFinance();
-    alert('Property deleted!');
+    showToast('Property deleted!', 'info');
 }
 
 // Track current images when editing
@@ -585,7 +585,7 @@ function filterBookings(filter) {
 // Booking actions
 function confirmBooking(bookingId) {
     updateBookingStatus(bookingId, 'confirmed');
-    alert('Booking accepted! The tenant has been notified and can now proceed to payment.');
+    showToast('Booking accepted! The tenant has been notified.', 'success');
 }
 
 function declineBooking(bookingId) {
@@ -1010,7 +1010,7 @@ function sendReply() {
     
     const replyText = document.getElementById('reply-message').value.trim();
     if (!replyText) {
-        alert('Please enter a reply message');
+        showToast('Please enter a reply message', 'warning');
         return;
     }
     
@@ -1041,7 +1041,7 @@ function sendReply() {
     messages.push(replyMessage);
     localStorage.setItem('nestify_messages', JSON.stringify(messages));
     
-    alert('Reply sent successfully!');
+    showToast('Reply sent successfully!', 'success');
     document.getElementById('reply-message').value = '';
     closeMessageModal();
     renderMessages();

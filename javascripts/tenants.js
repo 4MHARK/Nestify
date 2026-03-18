@@ -61,7 +61,7 @@ document.getElementById('profileForm')?.addEventListener('submit', function(e) {
     const newPassword = document.getElementById('profile-password').value;
     
     if (!newName || !newEmail) {
-        alert('Name and email are required');
+        showToast('Name and email are required', 'warning');
         return;
     }
     
@@ -83,7 +83,7 @@ document.getElementById('profileForm')?.addEventListener('submit', function(e) {
         session.phone = newPhone;
         localStorage.setItem('nestify_session', JSON.stringify(session));
         
-        alert('Profile updated successfully!');
+        showToast('Profile updated successfully!', 'success');
         
         // Update UI
         updateTenantUI(session);
@@ -327,7 +327,7 @@ function proceedToCheckout(bookingId) {
     const booking = bookings.find(b => b.id === bookingId);
     
     if (!booking) {
-        alert('Booking not found');
+        showToast('Booking not found', 'error');
         return;
     }
     
@@ -335,7 +335,7 @@ function proceedToCheckout(bookingId) {
     const property = properties.find(p => p.id === booking.propertyId);
     
     if (!property) {
-        alert('Property not found');
+        showToast('Property not found', 'error');
         return;
     }
     
@@ -352,7 +352,7 @@ function proceedToCheckout(bookingId) {
             localStorage.setItem('nestify_bookings', JSON.stringify(bookings));
         }
         
-        alert('Payment successful! Your booking is now confirmed.');
+        showToast('Payment successful! Your booking is now confirmed.', 'success');
         renderBookings(currentBookingFilter);
     }
 }
